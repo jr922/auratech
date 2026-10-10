@@ -115,8 +115,9 @@ export async function POST(req: NextRequest) {
         where: { id: orderId },
         include: { items: true, user: true }
       });
-      if (fullOrder && fullOrder.user?.email) {
-        sendPaymentConfirmedEmail(fullOrder, fullOrder.user?.email || fullOrder.customerEmail, fullOrder.user?.name || fullOrder.customerName || "Cliente").catch(e => console.error("Error correo Niubiz:", e));
+      if (fullOrder && (fullOrder.user?.email || fullOrder.customerEmail)) {
+        const emailTo = fullOrder.user?.email || fullOrder.customerEmail || "";
+        sendPaymentConfirmedEmail(fullOrder, emailTo, fullOrder.user?.name || fullOrder.customerName || "Cliente").catch(e => console.error("Error correo Niubiz:", e));
       }
     }
     return redirectTo(req, `/order-received?orderId=${orderId}&method=card`);

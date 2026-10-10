@@ -102,7 +102,7 @@ export default async function AdminDashboardPage() {
                 recentOrders.map(order => (
                   <tr key={order.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition">
                     <td className="py-4 px-8 font-bold text-slate-900">#{order.id.slice(-6).toUpperCase()}</td>
-                    <td className="py-4 px-8 text-slate-600">{order.user.name || order.user.email}</td>
+                    <td className="py-4 px-8 text-slate-600">{order.user?.name || order.customerName || order.user?.email || order.customerEmail}</td>
                     <td className="py-4 px-8 text-slate-600">{new Date(order.createdAt).toLocaleDateString('es-PE')}</td>
                     <td className="py-4 px-8 font-black text-blue-600">S/ {order.total.toFixed(2)}</td>
                     <td className="py-4 px-8">

@@ -70,10 +70,10 @@ export async function startNiubizPayment(orderId: string): Promise<StartPaymentR
     try {
       const niubiz = await createSessionToken({
         amount: order.total,
-        email: order.user.email,
-        customerId: order.user.id,
+        email: order.user?.email || order.customerEmail || "guest@auratech.pe",
+        customerId: order.user?.id || `guest-${order.id}`,
         isRegistered: Boolean(sessionUserId),
-        daysSinceRegistered: (Date.now() - order.user.createdAt.getTime()) / 86400000,
+        daysSinceRegistered: order.user ? (Date.now() - order.user.createdAt.getTime()) / 86400000 : 0,
         clientIp: ip,
       });
 
