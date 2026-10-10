@@ -2,7 +2,13 @@ import { Resend } from "resend";
 import { Order, OrderItem, User } from "@prisma/client";
 
 // Solo se inicializa si existe la llave
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("⚠️ No se encontró RESEND_API_KEY en las variables de entorno.");
+    return null;
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 const FROM_EMAIL = "Ventas Aura Tech <ventas@auratech.pe>";
 
 // Helper para formatear moneda
@@ -87,6 +93,7 @@ type FullOrder = Order & { items: OrderItem[] };
  * Correo 1: Pago Pendiente (Yape/Transferencia)
  */
 export async function sendPendingPaymentEmail(order: FullOrder, userEmail: string, userName: string) {
+  const resend = getResend();
   if (!resend) return;
   const trackingUrl = `${process.env.NEXTAUTH_URL || 'https://auratech.pe'}/pedido/${order.id}`;
 
@@ -120,12 +127,17 @@ export async function sendPendingPaymentEmail(order: FullOrder, userEmail: strin
   `;
 
   try {
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: userEmail,
       subject: `Aura Tech - Tu pedido #${order.id.slice(-6).toUpperCase()} está en espera de pago`,
       html: baseEmailTemplate(content),
     });
+    if (response.error) {
+      console.error("Resend API Error details:", response.error);
+    } else {
+      console.log("Correo enviado exitosamente:", response.data?.id);
+    }
   } catch (error) {
     console.error("Error enviando correo de pago pendiente:", error);
   }
@@ -135,6 +147,7 @@ export async function sendPendingPaymentEmail(order: FullOrder, userEmail: strin
  * Correo 2: Pago Confirmado (Recibo / Boleta Digital)
  */
 export async function sendPaymentConfirmedEmail(order: FullOrder, userEmail: string, userName: string) {
+  const resend = getResend();
   if (!resend) return;
   const trackingUrl = `${process.env.NEXTAUTH_URL || 'https://auratech.pe'}/pedido/${order.id}`;
 
@@ -174,12 +187,17 @@ export async function sendPaymentConfirmedEmail(order: FullOrder, userEmail: str
   `;
 
   try {
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: userEmail,
       subject: `Comprobante de Pago - Pedido #${order.id.slice(-6).toUpperCase()} - Aura Tech`,
       html: baseEmailTemplate(content),
     });
+    if (response.error) {
+      console.error("Resend API Error details:", response.error);
+    } else {
+      console.log("Correo enviado exitosamente:", response.data?.id);
+    }
   } catch (error) {
     console.error("Error enviando correo de pago confirmado:", error);
   }
@@ -189,6 +207,7 @@ export async function sendPaymentConfirmedEmail(order: FullOrder, userEmail: str
  * Correo 3: Pedido Enviado (Con Tracking)
  */
 export async function sendOrderShippedEmail(order: FullOrder, userEmail: string, userName: string, courier: string, trackingNumber: string) {
+  const resend = getResend();
   if (!resend) return;
   const trackingUrl = `${process.env.NEXTAUTH_URL || 'https://auratech.pe'}/pedido/${order.id}`;
 
@@ -211,12 +230,17 @@ export async function sendOrderShippedEmail(order: FullOrder, userEmail: string,
   `;
 
   try {
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: userEmail,
       subject: `¡Tu pedido #${order.id.slice(-6).toUpperCase()} ha sido enviado! 🚚`,
       html: baseEmailTemplate(content),
     });
+    if (response.error) {
+      console.error("Resend API Error details:", response.error);
+    } else {
+      console.log("Correo enviado exitosamente:", response.data?.id);
+    }
   } catch (error) {
     console.error("Error enviando correo de pedido enviado:", error);
   }
@@ -226,6 +250,7 @@ export async function sendOrderShippedEmail(order: FullOrder, userEmail: string,
  * Correo 4: Bienvenida Newsletter
  */
 export async function sendWelcomeNewsletterEmail(userEmail: string) {
+  const resend = getResend();
   if (!resend) return;
 
   const content = `
@@ -241,12 +266,17 @@ export async function sendWelcomeNewsletterEmail(userEmail: string) {
   `;
 
   try {
-    await resend.emails.send({
+    const response = await resend.emails.send({
       from: FROM_EMAIL,
       to: userEmail,
       subject: '¡Tu regalo de bienvenida a Aura Tech! 🎁',
       html: baseEmailTemplate(content),
     });
+    if (response.error) {
+      console.error("Resend API Error details:", response.error);
+    } else {
+      console.log("Correo enviado exitosamente:", response.data?.id);
+    }
   } catch (error) {
     console.error("Error enviando correo de bienvenida:", error);
   }
