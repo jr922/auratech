@@ -18,8 +18,8 @@ export default function AdminOrdersTable({ initialOrders }: { initialOrders: any
 
   const filteredOrders = orders.filter(o => 
     o.id.toLowerCase().includes(search.toLowerCase()) || 
-    (o.user?.email || "").toLowerCase().includes(search.toLowerCase()) ||
-    (o.user?.name || "").toLowerCase().includes(search.toLowerCase())
+    (o.user?.email || o.customerEmail || "").toLowerCase().includes(search.toLowerCase()) ||
+    (o.user?.name || o.customerName || "").toLowerCase().includes(search.toLowerCase())
   );
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
@@ -117,8 +117,8 @@ export default function AdminOrdersTable({ initialOrders }: { initialOrders: any
                       #{order.id.slice(-6).toUpperCase()}
                     </td>
                     <td className="p-4">
-                      <p className="font-bold text-slate-900">{order.user?.name || "Invitado"}</p>
-                      <p className="text-sm text-slate-500">{order.user?.email}</p>
+                      <p className="font-bold text-slate-900">{order.user?.name || order.customerName || "Invitado"}</p>
+                      <p className="text-sm text-slate-500">{order.user?.email || order.customerEmail || "Sin correo"}</p>
                     </td>
                     <td className="p-4 text-slate-600">
                       {new Date(order.createdAt).toLocaleDateString('es-PE')}

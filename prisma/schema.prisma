@@ -87,8 +87,11 @@ model Category {
 
 model Order {
   id              String      @id @default(cuid())
-  userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String?
+  user            User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customerEmail   String?
+  customerName    String?
+  customerPhone   String?
   total           Float
   status          String      @default("PENDING") // Valores permitidos: "PENDING", "PAID", "SHIPPED", "CANCELLED"
   paymentMethod   String      @default("yape")

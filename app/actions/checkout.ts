@@ -31,35 +31,25 @@ export async function processCheckout(data: {
     }
 
     const session = await getServerSession(authOptions);
-    let userId: string;
-    // Un invitado que usa el email de una cuenta existente NO puede modificar los datos de esa cuenta
-    let canUpdateUserData = true;
+    let userId: string | null = null;
+    let canUpdateUserData = false;
 
     if (session?.user && (session.user as { id?: string }).id) {
       userId = (session.user as { id?: string }).id as string;
+      canUpdateUserData = true;
     } else {
+      // ESTILO NIKE: Si es invitado, verificamos si existe su correo, si existe lo enlazamos,
+      // pero si NO existe, NO creamos un usuario. Lo dejamos como userId = null.
       const existingUser = await prisma.user.findUnique({ where: { email: data.email.trim().toLowerCase() } });
       if (existingUser) {
         userId = existingUser.id;
-        canUpdateUserData = false;
+        canUpdateUserData = false; // No actualizar documento de usuario existente desde invitado
       } else {
-        const randomPassword = Math.random().toString(36).slice(-10);
-        const hashedPassword = await bcrypt.hash(randomPassword, 10);
-        const newUser = await prisma.user.create({
-          data: { 
-            email: data.email.trim().toLowerCase(), 
-            name: data.name, 
-            password: hashedPassword, 
-            role: "USER" 
-          }
-        });
-        userId = newUser.id;
+        userId = null; // Invitado puro, no creamos cuenta
       }
     }
 
-    // Actualizamos el documento (DNI/RUC). La dirección vive en el modelo Address
-    // y se registra al finalizar la compra (ver rememberCheckoutAddress).
-    if (canUpdateUserData) {
+    if (userId && canUpdateUserData) {
       await prisma.user.update({
         where: { id: userId },
         data: { document: data.document }
@@ -220,6 +210,9 @@ export async function processCheckout(data: {
       const newOrder = await tx.order.create({
         data: {
           userId,
+          customerEmail: data.email.trim().toLowerCase(),
+          customerName: data.name,
+          customerPhone: data.phone || null,
           total: finalTotal,
           // Toda orden nace PENDING: solo pasa a PAID cuando el pago se confirma
           // (autorización de Niubiz o verificación manual de Yape/Plin/transferencia).
@@ -241,7 +234,7 @@ export async function processCheckout(data: {
                 notes: data.paymentMethod === 'card'
                   ? "Orden generada a través de la web. Pendiente de pago con tarjeta."
                   : "Orden generada a través de la web. Pendiente de confirmación de pago.", 
-                createdBy: userId 
+                createdBy: userId || "GUEST" 
               }
             ]
           }
@@ -268,7 +261,7 @@ export async function processCheckout(data: {
 
     // Guardar la dirección en la libreta del cliente (best-effort, no afecta la compra).
     // Solo con sesión iniciada: un invitado no debe escribir en la libreta de una cuenta existente.
-    if (data.addressDetail && session?.user) {
+    if (data.addressDetail && session?.user && userId) {
       try {
         await rememberCheckoutAddress(userId, data.addressDetail, data.phone);
       } catch (e) {

@@ -77,7 +77,6 @@ export async function updateOrderStatus(orderId: string, newStatus: string, note
 
     // Send email if marked as PAID and it wasn't paid before
     if (newStatus === "PAID" && order.status !== "PAID") {
-      // @ts-expect-error Types are close enough
       sendPaymentConfirmedEmail(order, order.user?.email || "anon", order.user?.name || "Cliente").catch(console.error);
     }
 
@@ -126,8 +125,7 @@ export async function dispatchOrder(orderId: string, courier: string, trackingNu
     });
 
     // Send Email
-    // @ts-expect-error Types are close enough
-    sendOrderShippedEmail(order, order.user?.email || "anon", order.user?.name || "Cliente", courier, trackingNumber).catch(console.error);
+    sendOrderShippedEmail(order, order.user?.email || order.customerEmail || "anon", order.user?.name || order.customerName || "Cliente", courier, trackingNumber).catch(console.error);
 
     revalidatePath("/admin/pedidos");
     revalidatePath(`/pedido/${orderId}`);

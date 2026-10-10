@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
         include: { items: true, user: true }
       });
       if (fullOrder && fullOrder.user?.email) {
-        sendPaymentConfirmedEmail(fullOrder, fullOrder.user.email, fullOrder.user.name || "Cliente").catch(e => console.error("Error correo Niubiz:", e));
+        sendPaymentConfirmedEmail(fullOrder, fullOrder.user?.email || fullOrder.customerEmail, fullOrder.user?.name || fullOrder.customerName || "Cliente").catch(e => console.error("Error correo Niubiz:", e));
       }
     }
     return redirectTo(req, `/order-received?orderId=${orderId}&method=card`);

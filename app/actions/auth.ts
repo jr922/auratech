@@ -37,12 +37,23 @@ export async function registerUser(formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
       role: "USER",
+    }
+  });
+
+  // ESTILO NIKE: Vincular compras pasadas de invitado a este nuevo usuario
+  await prisma.order.updateMany({
+    where: { 
+      customerEmail: email,
+      userId: null
+    },
+    data: {
+      userId: newUser.id
     }
   });
 
