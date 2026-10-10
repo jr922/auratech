@@ -1,0 +1,364 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  document  String? // DNI o RUC
+  phone     String?
+  address   String? // Dirección principal de envío
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+
+  // --- Relaciones de Cimientos ---
+  addresses           Address[]
+  cart                Cart?
+  passwordResetTokens PasswordResetToken[]
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  description   String
+  price         Float
+  originalPrice Float?
+  stock         Int      @default(0)
+  images        String // JSON stringified array for simplicity in SQLite
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  brandId String?
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  // --- Cimientos: Ciclo de vida y Soft Delete ---
+  status    String    @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  deletedAt DateTime? // Nunca borramos productos físicamente
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  orderItems      OrderItem[]
+  reviews         Review[]
+  variants        ProductVariant[]
+  restockRequests RestockRequest[]
+
+  // --- Cimientos: Enterprise ---
+  cartItems       CartItem[]
+  warehouseStocks WarehouseStock[]
+  inventoryLogs   InventoryLog[]
+  optionTypes     OptionType[]
+
+  // Cross-selling (Relación múltiple a sí mismo)
+  relatedTo   Product[] @relation("RelatedProducts")
+  relatedFrom Product[] @relation("RelatedProducts")
+
+  @@index([slug])
+}
+
+model Category {
+  id       String  @id @default(uuid())
+  name     String
+  slug     String  @unique
+  imageUrl String? // Ej: "/images/categories/apple.png" o un link de internet
+
+  // --- Jerarquía (Padre / Hija) ---
+  parentId String?
+  parent   Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children Category[] @relation("SubCategories")
+
+  products Product[]
+
+  // --- Cimientos: Auditoría y Soft Delete ---
+  isActive  Boolean   @default(true)
+  deletedAt DateTime? // Para nunca hacer un DELETE físico
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  total           Float
+  status          String      @default("PENDING") // Valores permitidos: "PENDING", "PAID", "SHIPPED", "CANCELLED"
+  paymentMethod   String      @default("yape")
+  shippingAddress String?
+  billingDocument String?
+  shippingOption  String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+
+  // --- Pagos y totales (para conciliación y devoluciones) ---
+  paidAt          DateTime? // Se llena solo cuando el pago fue confirmado
+  couponCode      String? // Cupón aplicado (para devolver el uso si se cancela)
+  discountAmount  Float            @default(0)
+  shippingCost    Float            @default(0)
+  paymentAttempts PaymentAttempt[]
+
+  // --- Cimientos: Auditoría y Marketing ---
+  history     OrderHistory[]
+  utmSource   String?
+  utmCampaign String?
+
+  trackingNumber String?
+  courier        String?
+
+  @@index([userId])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName  String   @default("Producto Descontinuado")
+  productImage String   @default("/placeholder.webp")
+  variantId    String?
+  quantity     Int
+  price        Float
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Claim {
+  id            String   @id @default(cuid())
+  name          String
+  docType       String
+  docNumber     String
+  address       String
+  phone         String
+  email         String
+  claimType     String // "Reclamo" o "Queja"
+  goodsType     String // "Producto" o "Servicio"
+  amount        Float
+  description   String
+  claimDetail   String
+  customerOrder String
+  createdAt     DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Coupon {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  discountType  String // "PERCENTAGE" o "FIXED"
+  discountValue Float
+  isActive      Boolean  @default(true)
+  usageLimit    Int? // Limite total de veces que se puede usar (opcional)
+  usedCount     Int      @default(0)
+  createdAt     DateTime @default(now())
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rating     Int
+  comment    String
+  authorName String
+  createdAt  DateTime @default(now())
+}
+
+model ProductVariant {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name       String // Ej. "128GB - Negro"
+  price      Float // Precio específico de esta variante
+  stock      Int      @default(0)
+  attributes String // JSON stringified (Ej: {"color": "Negro", "capacity": "128GB"})
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RestockRequest {
+  id        String   @id @default(cuid())
+  email     String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variantId String? // Opcional, si es una variante específica
+  status    String   @default("PENDING") // PENDING, NOTIFIED
+  createdAt DateTime @default(now())
+}
+
+model Brand {
+  id       String  @id @default(uuid())
+  name     String  @unique
+  slug     String  @unique
+  imageUrl String?
+
+  // --- Cimientos: Auditoría y Soft Delete ---
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+
+  products Product[]
+}
+
+// ==========================================
+// E-COMMERCE ENTERPRISE FOUNDATION MODELS
+// ==========================================
+
+model Address {
+  id          String  @id @default(uuid())
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isDefault   Boolean @default(false)
+  title       String // "Casa", "Oficina"
+  addressLine String // Calle / dirección exacta
+  city        String // Distrito
+  province    String? // Provincia
+  state       String // Departamento
+  zipCode     String?
+  phone       String?
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String?    @unique // Opcional si es usuario invitado
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?    @unique // Para invitados (guest cart)
+  items     CartItem[]
+
+  lastActiveAt DateTime @default(now()) // Para tracking de Carritos Abandonados
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  variantId String? // Relacionado al ProductVariant
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Warehouse {
+  id       String           @id @default(uuid())
+  name     String // "Almacén Principal Lima", "Tienda Miraflores"
+  location String?
+  isActive Boolean          @default(true)
+  stocks   WarehouseStock[]
+}
+
+model WarehouseStock {
+  id          String    @id @default(uuid())
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variantId   String? // Si manejan variantes
+  quantity    Int       @default(0)
+
+  @@unique([warehouseId, productId, variantId])
+}
+
+model InventoryLog {
+  id          String   @id @default(uuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variantId   String?
+  warehouseId String
+  reason      String // "SALE", "RESTOCK", "RETURN", "ADJUSTMENT"
+  quantity    Int // Positivo o negativo
+  notes       String?
+  createdAt   DateTime @default(now())
+  createdBy   String? // ID del empleado (auditoría)
+}
+
+model OptionType {
+  id        String        @id @default(uuid())
+  productId String
+  product   Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String // "Color", "Talla"
+  values    OptionValue[]
+}
+
+model OptionValue {
+  id           String     @id @default(uuid())
+  optionTypeId String
+  optionType   OptionType @relation(fields: [optionTypeId], references: [id], onDelete: Cascade)
+  value        String // "Rojo", "S"
+}
+
+model OrderHistory {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String // PENDING, PAID, SHIPPED...
+  notes     String?
+  createdAt DateTime @default(now())
+  createdBy String? // ID del empleado o "SYSTEM"
+}
+
+// ==========================================
+// PAGOS, SEGURIDAD Y OPERACIÓN
+// ==========================================
+
+// Cada intento de cobro con pasarela (Niubiz). El id autoincremental sirve de
+// purchaseNumber (numérico, único, máx. 12 dígitos como exige Niubiz).
+model PaymentAttempt {
+  id            Int      @id @default(autoincrement())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider      String   @default("NIUBIZ")
+  amount        Float
+  status        String   @default("CREATED") // CREATED, PROCESSING, APPROVED, DENIED, ERROR
+  actionCode    String? // ACTION_CODE de Niubiz ("000" = aprobado)
+  transactionId String? // ID de transacción de la pasarela
+  rawResponse   String? // JSON de la respuesta (sin datos sensibles) para auditoría
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([orderId])
+}
+
+// Limitador de peticiones respaldado en BD (funciona en serverless sin Redis)
+model RateLimit {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique // Nunca se guarda el token en claro
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
