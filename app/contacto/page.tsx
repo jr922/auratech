@@ -63,7 +63,7 @@ export default function ContactoPage() {
                 <Phone className="w-6 h-6 text-blue-600 shrink-0" />
                 <div>
                   <h4 className="font-bold text-slate-900 mb-1">Teléfono</h4>
-                  <p>+51 992 279 632</p>
+                  <p>+51 900 273 072</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 text-slate-600">

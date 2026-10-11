@@ -102,7 +102,7 @@ export async function sendPendingPaymentEmail(order: FullOrder, userEmail: strin
     paymentInstructions = `
       <div class="alert-box">
         <p class="alert-title">¡Último paso!</p>
-        <p style="margin: 0; color: #1e40af;">Por favor transfiere el total de <strong>${formatPrice(order.total)}</strong> al número <strong>992 279 632</strong> (Luis Enrique) mediante Yape o Plin. Luego envía la captura a nuestro WhatsApp.</p>
+        <p style="margin: 0; color: #1e40af;">Por favor transfiere el total de <strong>${formatPrice(order.total)}</strong> al número <strong>903 516 376</strong> (Luis Javier Junior Najera Quispe) mediante Yape o Plin. Luego envía la captura a nuestro WhatsApp.</p>
       </div>
     `;
   } else if (order.paymentMethod === 'transfer') {

@@ -20,7 +20,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
   const shortOrderId = orderId.length > 6 ? orderId.slice(-6).toUpperCase() : orderId;
 
   const [copied, setCopied] = useState(false);
-  const phoneNumber = "992 279 632";
+  const phoneNumber = "903 516 376";
   const wppLink = `https://wa.me/51900273072?text=Hola,%20acabo%20de%20realizar%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
 
   const copyToClipboard = () => {
@@ -102,7 +102,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
                 {/* Número y WhatsApp */}
                 <div className="flex flex-col items-center md:items-start gap-6">
                   <div>
-                    <span className="block text-slate-400 font-bold mb-2">TITULAR: LUIS ENRIQUE</span>
+                    <span className="block text-slate-400 font-bold mb-2">TITULAR: LUIS JAVIER JUNIOR NAJERA QUISPE</span>
                     <div className="flex items-center gap-4">
                       <span className="text-4xl font-black text-slate-900 tracking-wider">{phoneNumber}</span>
                       <button 

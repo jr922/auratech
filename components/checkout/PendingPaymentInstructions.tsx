@@ -12,12 +12,12 @@ type Props = {
 
 export default function PendingPaymentInstructions({ paymentMethod, isPaid, orderId }: Props) {
   const [copied, setCopied] = useState(false);
-  const phoneNumber = "992 279 632";
+  const phoneNumber = "903 516 376";
   const shortOrderId = orderId.length > 6 ? orderId.slice(-6).toUpperCase() : orderId;
   const wppLink = `https://wa.me/51900273072?text=Hola,%20soy%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("992279632");
+    navigator.clipboard.writeText("903516376");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -54,7 +54,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
           {/* Número y WhatsApp */}
           <div className="flex flex-col items-center md:items-start gap-6">
             <div>
-              <span className="block text-slate-400 font-bold mb-2 text-sm text-center md:text-left">TITULAR: LUIS ENRIQUE</span>
+              <span className="block text-slate-400 font-bold mb-2 text-sm text-center md:text-left">TITULAR: LUIS JAVIER JUNIOR NAJERA QUISPE</span>
               <div className="flex items-center gap-4">
                 <span className="text-4xl font-black text-slate-900 tracking-wider">{phoneNumber}</span>
                 <button 

@@ -52,7 +52,7 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-blue-600 shrink-0" />
                 <div>
                   <p className="font-semibold text-slate-900">Contact Center</p>
-                  <p>+51 992 279 632</p>
+                  <p>+51 900 273 072</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
