@@ -73,32 +73,30 @@ export default function CategoryCarousel({ dbCategories = [] }: CategoryCarousel
             const isImageBroken = brokenImages[cat.id];
 
             return (
-              <CarouselItem key={cat.id} className="pl-2 md:pl-4 basis-1/2 md:basis-1/4 lg:basis-1/6">
-                <div className="p-1">
+              <CarouselItem key={cat.id} className="pl-2 md:pl-4 basis-[44%] sm:basis-1/3 md:basis-1/4 lg:basis-1/6">
+                <div className="p-0.5 sm:p-1">
                   <Link href={`/tienda?categoria=${cat.slug}`}>
-                    <Card className="rounded-3xl border-slate-200 cursor-pointer hover:border-blue-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden">
-                      <CardContent className="flex flex-col items-center justify-center p-6 text-center">
-                        <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 relative p-2 ${finalBg}`}>
+                    <Card className="rounded-2xl sm:rounded-3xl border-slate-200 cursor-pointer hover:border-blue-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden">
+                      <CardContent className="flex flex-col items-center justify-center p-3.5 sm:p-6 text-center">
+                        <div className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center mb-2.5 sm:mb-4 group-hover:scale-110 transition-transform duration-300 relative p-2 ${finalBg}`}>
                         {!isImageBroken ? (
                           <Image 
                             src={finalImage}
                             alt={cat.name}
-                            width={64}
-                            height={64}
+                            width={54}
+                            height={54}
                             className="object-contain" 
-                                 // 👇 El detector de errores: si la foto no existe física, activa el icono vectorial
-                              onError={() => {
-                                setBrokenImages((prev) => ({ ...prev, [cat.id]: true }));
-                              }}
-                            />
+                            onError={() => {
+                              setBrokenImages((prev) => ({ ...prev, [cat.id]: true }));
+                            }}
+                          />
                         ) : (
-                        // 🛡️ Escudo Automático: Si la foto falla, dibuja de inmediato el Icono de Lucide
-                            <IconFallback className="w-8 h-8 text-slate-700 animate-fade-in" />
-                          )}
+                          <IconFallback className="w-6 h-6 sm:w-8 sm:h-8 text-slate-700 animate-fade-in" />
+                        )}
 
                         </div>
-                        <h3 className="font-bold text-slate-800 text-sm truncate w-full">{cat.name}</h3>
-                        <p className="text-[10px] uppercase font-bold text-slate-400 mt-1">{finalBrand}</p>
+                        <h3 className="font-bold text-slate-800 text-xs sm:text-sm truncate w-full">{cat.name}</h3>
+                        <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 mt-0.5 sm:mt-1">{finalBrand}</p>
                       </CardContent>
                     </Card>
                   </Link>

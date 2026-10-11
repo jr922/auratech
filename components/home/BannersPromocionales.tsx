@@ -21,18 +21,18 @@ export default function BannersPromocionales({ type = 1 }: { type?: 1 | 2 }) {
           <Link 
             key={idx} 
             href={banner.link}
-            className={`relative w-full h-[400px] rounded-3xl p-8 overflow-hidden group flex flex-col justify-between ${banner.bg} ${banner.color} transition-transform hover:-translate-y-2 hover:shadow-xl`}
+            className={`relative w-full h-[240px] sm:h-[320px] md:h-[400px] rounded-2xl sm:rounded-3xl p-6 sm:p-8 overflow-hidden group flex flex-col justify-between ${banner.bg} ${banner.color} transition-transform hover:-translate-y-2 hover:shadow-xl`}
           >
             {/* Texto (Arriba) */}
             <div className="relative z-10">
-              <span className="uppercase text-xs font-bold tracking-widest opacity-80 mb-2 block">{banner.subtitle}</span>
-              <h3 className="text-3xl font-black leading-tight max-w-[200px]">{banner.title}</h3>
+              <span className="uppercase text-[10px] sm:text-xs font-bold tracking-widest opacity-80 mb-1 sm:mb-2 block">{banner.subtitle}</span>
+              <h3 className="text-xl sm:text-3xl font-black leading-tight max-w-[200px]">{banner.title}</h3>
             </div>
             
             {/* Botón (Medio/Abajo) */}
-            <div className="relative z-10 mt-auto mb-4">
-              <span className="inline-flex items-center gap-2 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity translate-y-4 group-hover:translate-y-0 duration-300">
-                Comprar Ahora <ArrowRight className="w-4 h-4" />
+            <div className="relative z-10 mt-auto mb-2 sm:mb-4">
+              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 bg-white/20 sm:bg-transparent px-3 py-1.5 sm:px-0 sm:py-0 rounded-full sm:rounded-none w-fit backdrop-blur-sm sm:backdrop-blur-none">
+                Comprar Ahora <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </span>
             </div>
 
