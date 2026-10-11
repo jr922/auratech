@@ -307,12 +307,12 @@ export default function CheckoutPage() {
                 )}
                 <div className="flex flex-col gap-2">
                   <Label>{receiptType === "factura" ? "RUC" : "DNI / CE"}</Label>
-                  <Input {...register("document")} className={errors.document ? "border-red-500" : ""} placeholder={receiptType === "factura" ? "11 dígitos" : "8 o 9 dígitos"} />
+                  <Input {...register("document")} inputMode="numeric" className={errors.document ? "border-red-500" : ""} placeholder={receiptType === "factura" ? "11 dígitos" : "8 o 9 dígitos"} />
                   {errors.document && <span className="text-xs text-red-500">{errors.document.message}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label>Teléfono</Label>
-                  <Input {...register("phone")} className={errors.phone ? "border-red-500" : ""} />
+                  <Input type="tel" inputMode="numeric" {...register("phone")} className={errors.phone ? "border-red-500" : ""} placeholder="Ej. 987654321" />
                   {errors.phone && <span className="text-xs text-red-500">{errors.phone.message}</span>}
                 </div>
                 <div className="flex flex-col gap-2 md:col-span-2">

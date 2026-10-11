@@ -54,7 +54,7 @@ export default function HeroCarousel() {
         <CarouselContent>
           {banners.map((banner) => (
             <CarouselItem key={banner.id}>
-              <Link href={banner.link} className="block relative w-full h-[450px] sm:h-[500px] md:h-[600px] overflow-hidden group cursor-pointer bg-slate-900">
+              <Link href={banner.link} className="block relative w-full h-[210px] sm:h-[350px] md:h-[480px] lg:h-[580px] overflow-hidden group cursor-pointer bg-slate-900">
                 
                 {/* Imagen del Banner */}
                 <Image 

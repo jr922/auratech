@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Truck, ShieldCheck, Heart, ShoppingCart, Check, Minus, Plus, Mail } from "lucide-react";
+import { Star, Truck, ShieldCheck, Heart, ShoppingCart, Check, Minus, Plus, Mail, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
@@ -198,7 +198,7 @@ export default function SingleProductClient({ product, relatedProducts }: Single
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white pb-20">
+    <div className="flex flex-col min-h-screen bg-white pb-32">
       
       {/* BREADCRUMBS */}
       <div className="bg-slate-50 border-b border-slate-100 py-4 mb-8">
@@ -219,38 +219,68 @@ export default function SingleProductClient({ product, relatedProducts }: Single
       <div className="max-w-7xl mx-auto px-4 w-full flex flex-col lg:flex-row gap-12 lg:gap-20">
         
         {/* COLUMNA IZQUIERDA: GALERÍA DE IMÁGENES */}
-        <div className="w-full lg:w-1/2 flex flex-col gap-4">
-          <div className="w-full aspect-square bg-slate-100 rounded-3xl flex items-center justify-center border border-slate-200 relative overflow-hidden group">
+        <div className="w-full lg:w-1/2 flex flex-col gap-3 sm:gap-4">
+          <div className="w-full aspect-square bg-slate-100 rounded-2xl sm:rounded-3xl flex items-center justify-center border border-slate-200 relative overflow-hidden group">
             {product.discount && (
-              <span className="absolute top-6 left-6 z-10 bg-red-500 text-white text-sm font-bold px-3 py-1.5 rounded-lg">
+              <span className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 bg-red-500 text-white text-xs sm:text-sm font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg">
                 {product.discount}
               </span>
             )}
-            <div className="absolute top-6 right-6 z-10 bg-white/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition shadow-sm cursor-pointer hover:bg-white text-slate-600">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
-            </div>
+            
+            {/* Controles de Foto Anterior / Siguiente en Móvil */}
+            {product.images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    setActiveImage((prev) => (prev > 0 ? prev - 1 : product.images.length - 1)); 
+                  }}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 bg-white/80 backdrop-blur-md rounded-full shadow-md flex items-center justify-center text-slate-700 hover:bg-white active:scale-95 transition"
+                  aria-label="Foto anterior"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    setActiveImage((prev) => (prev < product.images.length - 1 ? prev + 1 : 0)); 
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 bg-white/80 backdrop-blur-md rounded-full shadow-md flex items-center justify-center text-slate-700 hover:bg-white active:scale-95 transition"
+                  aria-label="Siguiente foto"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                
+                {/* Indicador de foto en móvil (ej. 1 / 4) */}
+                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[11px] font-bold px-2.5 py-1 rounded-full z-10 md:hidden pointer-events-none">
+                  {activeImage + 1} / {product.images.length}
+                </div>
+              </>
+            )}
+
             <Image 
               src={product.images[activeImage] || "/placeholder.webp"} 
               alt={product.name} 
               fill
               priority
-              className="object-contain p-8 mix-blend-multiply transition-transform duration-500 hover:scale-105" 
+              className="object-contain p-6 sm:p-8 mix-blend-multiply transition-transform duration-500 hover:scale-105" 
             />
           </div>
-          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+          <div className="flex gap-2 sm:gap-4 overflow-x-auto hide-scrollbar pb-2">
             {product.images.map((img, idx) => (
               <button 
                 key={idx}
                 onClick={() => setActiveImage(idx)}
-                className={`relative w-24 h-24 shrink-0 rounded-2xl flex items-center justify-center bg-slate-50 border-2 transition-all overflow-hidden ${activeImage === idx ? "border-blue-600 shadow-md" : "border-transparent hover:border-slate-300"}`}
+                className={`relative w-16 h-16 sm:w-24 sm:h-24 shrink-0 rounded-xl sm:rounded-2xl flex items-center justify-center bg-slate-50 border-2 transition-all overflow-hidden ${activeImage === idx ? "border-blue-600 shadow-md" : "border-transparent hover:border-slate-300"}`}
               >
-                {/* ANTIGRAVITY: Reemplazado span por Image real para las miniaturas */}
                 <Image 
                   src={img} 
                   alt={`Miniatura ${idx + 1}`} 
                   fill 
                   sizes="96px" 
-                  className="object-contain p-2 mix-blend-multiply" 
+                  className="object-contain p-1.5 sm:p-2 mix-blend-multiply" 
                 />
               </button>
             ))}
@@ -615,21 +645,21 @@ export default function SingleProductClient({ product, relatedProducts }: Single
 
       {/* STICKY ADD TO CART BAR (MOBILE ONLY) */}
       <div 
-        className={`fixed top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-slate-200 p-4 z-30 transform transition-all duration-300 md:hidden flex items-center justify-between shadow-md ${
-          showStickyCart ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+        className={`fixed bottom-[64px] sm:bottom-[70px] left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 z-40 transform transition-all duration-300 md:hidden flex items-center justify-between shadow-[0_-4px_16px_rgba(0,0,0,0.08)] ${
+          showStickyCart ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        <div className="flex flex-col">
-          <span className="text-sm font-bold text-slate-900 truncate max-w-[160px]">{product.name}</span>
-          <span className="text-blue-600 font-black">S/ {currentPrice.toFixed(2)}</span>
+        <div className="flex flex-col min-w-0 pr-3">
+          <span className="text-xs font-bold text-slate-900 truncate max-w-[170px]">{product.name}</span>
+          <span className="text-blue-600 font-black text-sm">S/ {currentPrice.toFixed(2)}</span>
         </div>
         <button 
           onClick={handleAddToCart}
           disabled={currentStock === 0}
-          className="bg-blue-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-xl hover:bg-blue-700 active:scale-95 transition shadow-md shadow-blue-200 flex items-center gap-2 text-xs shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isAdded ? <Check className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
-          {currentStock === 0 ? "Agotado" : isAdded ? "Agregado" : "Comprar"}
+          {isAdded ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+          {currentStock === 0 ? "Agotado" : isAdded ? "¡Listo!" : "Comprar"}
         </button>
       </div>
 
