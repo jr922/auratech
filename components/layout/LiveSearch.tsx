@@ -91,7 +91,7 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
 
       {/* Dropdown de Autocomplete */}
       {isOpen && (
-        <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden z-50">
+        <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden z-50 max-h-[70vh] overflow-y-auto">
           {results.length > 0 ? (
             <ul className="py-2">
               <li className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50 border-b border-slate-50">

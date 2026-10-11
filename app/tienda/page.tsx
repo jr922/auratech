@@ -119,8 +119,8 @@ export default async function TiendaPage(props: { searchParams: Promise<{ [key: 
         {/* COLUMNA DERECHA (75% - Grid Productos) */}
         <div className="flex-1 flex flex-col min-w-0">
           
-          <div className="mb-8">
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-4 capitalize">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3 sm:mb-4 capitalize">
               {q ? `Resultados para "${q}"` : 
                currentCategoryName ? currentCategoryName : 
                currentBrandName ? `Productos ${currentBrandName}` : 
@@ -133,7 +133,7 @@ export default async function TiendaPage(props: { searchParams: Promise<{ [key: 
 
           {allProducts.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8 sm:mb-12">
                 {allProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

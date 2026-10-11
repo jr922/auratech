@@ -28,6 +28,7 @@ export default function Header({ categories = [] }: { categories?: { name: strin
   const setIsCartOpen = (open: boolean) => open ? openCart() : closeCart();
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   
   const { items, removeItem, updateQuantity, totalItems, totalPrice, isHydrated, clearCart } = useCartStore();
   const wishlist = useWishlistStore();
@@ -52,6 +53,11 @@ export default function Header({ categories = [] }: { categories?: { name: strin
               </SheetHeader>
               <div className="p-4 flex-1 overflow-y-auto">
                 
+                {/* Buscador Rápido en Menú Móvil */}
+                <div className="mb-6">
+                  <LiveSearch className="w-full relative" />
+                </div>
+
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">Categorías</h3>
                 <ul className="flex flex-col font-medium text-slate-700 mb-8">
                   {categories.map((cat) => (
@@ -111,6 +117,15 @@ export default function Header({ categories = [] }: { categories?: { name: strin
               </span>
             )}
           </Link>
+          {/* Botón de Búsqueda Móvil */}
+          <button
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            aria-label="Buscar productos"
+            className="md:hidden text-slate-600 hover:text-blue-600 p-2 rounded-lg hover:bg-slate-50 transition"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+
           {/*Boton iniciar sesion*/} 
           <AuthDropdown />
           
@@ -244,6 +259,13 @@ export default function Header({ categories = [] }: { categories?: { name: strin
 
         </div>
       </div>
+
+      {/* Barra de Búsqueda Móvil Desplegable */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden px-4 pb-4 pt-2 border-t border-slate-100 bg-white shadow-lg animate-in slide-in-from-top-2 duration-200">
+          <LiveSearch className="w-full relative" />
+        </div>
+      )}
     </header>
   );
 }
