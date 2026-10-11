@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export default function FloatingElements() {
   const [showScroll, setShowScroll] = useState(false);
-  const phoneNumber = "51992279632";
+  const phoneNumber = "51900273072";
   const message = "Hola Aura Tech, necesito ayuda con una compra.";
   
   useEffect(() => {

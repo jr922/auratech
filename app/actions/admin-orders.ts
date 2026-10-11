@@ -77,7 +77,10 @@ export async function updateOrderStatus(orderId: string, newStatus: string, note
 
     // Send email if marked as PAID and it wasn't paid before
     if (newStatus === "PAID" && order.status !== "PAID") {
-      sendPaymentConfirmedEmail(order, order.user?.email || "anon", order.user?.name || "Cliente").catch(console.error);
+      const email = order.user?.email || order.customerEmail;
+      if (email) {
+        sendPaymentConfirmedEmail(order, email, order.user?.name || order.customerName || "Cliente").catch(console.error);
+      }
     }
 
     revalidatePath("/admin/pedidos");

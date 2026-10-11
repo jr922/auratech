@@ -21,7 +21,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
 
   const [copied, setCopied] = useState(false);
   const phoneNumber = "992 279 632";
-  const wppLink = `https://wa.me/51992279632?text=Hola,%20acabo%20de%20realizar%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
+  const wppLink = `https://wa.me/51900273072?text=Hola,%20acabo%20de%20realizar%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(phoneNumber.replace(/\s/g, ""));

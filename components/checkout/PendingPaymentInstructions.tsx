@@ -14,7 +14,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
   const [copied, setCopied] = useState(false);
   const phoneNumber = "992 279 632";
   const shortOrderId = orderId.length > 6 ? orderId.slice(-6).toUpperCase() : orderId;
-  const wppLink = `https://wa.me/51992279632?text=Hola,%20soy%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
+  const wppLink = `https://wa.me/51900273072?text=Hola,%20soy%20el%20pedido%20%23${shortOrderId}.%20Aquí%20envío%20mi%20constancia%20de%20pago.`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText("992279632");
