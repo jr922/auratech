@@ -51,7 +51,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     openCart();
 
     toast.success(`${product.name} se agregó al carrito`, {
-      description: "Puedes verlo en el menú superior."
+      description: "Revisa tu carrito para continuar con la compra."
     });
   };
 
@@ -103,7 +103,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="absolute top-3 right-3 sm:top-6 sm:right-6 z-10 flex flex-col gap-2">
         <button 
           onClick={toggleWishlist}
-          className={`opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm border hover:border-red-500 rounded-full w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 ${inWishlist ? '!opacity-100 border-red-500 text-red-500' : 'border-slate-200 text-slate-400 hover:text-red-500'}`}
+          aria-label={inWishlist ? "Quitar de favoritos" : "Agregar a favoritos"}
+          aria-pressed={inWishlist}
+          className={`opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm border hover:border-red-500 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 ${inWishlist ? '!opacity-100 border-red-500 text-red-500' : 'border-slate-200 text-slate-400 hover:text-red-500'}`}
         >
           <Heart className={`w-3.5 h-3.5 sm:w-5 sm:h-5 ${inWishlist ? 'fill-current' : ''}`} />
         </button>
@@ -215,12 +217,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         </Button>
       )}
 
-      {/* Modal de Vista Previa */}
-      <QuickViewModal 
-        product={product} 
-        isOpen={isQuickViewOpen} 
-        onClose={() => setIsQuickViewOpen(false)} 
-      />
+      {/* Modal de Vista Previa (solo se monta al abrirse: evita N modales ocultos en el catálogo) */}
+      {isQuickViewOpen && (
+        <QuickViewModal 
+          product={product} 
+          isOpen={isQuickViewOpen} 
+          onClose={() => setIsQuickViewOpen(false)} 
+        />
+      )}
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-6">
       {/* Overlay */}
       <div 
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
@@ -88,23 +88,33 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
       />
 
       {/* Modal Content */}
-      <div className="relative bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+      <div className="relative bg-white w-full max-w-4xl rounded-t-3xl md:rounded-3xl shadow-2xl overflow-y-auto md:overflow-hidden flex flex-col md:flex-row max-h-[92dvh] md:max-h-[90vh] animate-in slide-in-from-bottom md:slide-in-from-bottom-0 md:zoom-in-95 duration-300">
         
-        {/* Botón Cerrar Móvil/Desktop */}
+        {/* Botón Cerrar (móvil: se queda visible mientras se hace scroll) */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition shadow-sm"
+          aria-label="Cerrar"
+          className="md:hidden sticky top-3 z-30 ml-auto mr-3 mt-3 -mb-[52px] shrink-0 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-slate-600 shadow-md"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        {/* Botón Cerrar (desktop) */}
+        <button 
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="hidden md:flex absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition shadow-sm"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Galería (Izquierda) */}
-        <div className="w-full md:w-1/2 bg-slate-50 p-6 flex flex-col">
-          <div className="relative flex-1 min-h-[300px] md:min-h-[400px] w-full rounded-2xl overflow-hidden bg-white mb-4 border border-slate-100">
+        <div className="w-full md:w-1/2 bg-slate-50 p-4 pt-14 md:p-6 flex flex-col shrink-0">
+          <div className="relative flex-1 min-h-[240px] md:min-h-[400px] w-full rounded-2xl overflow-hidden bg-white mb-4 border border-slate-100">
             <Image 
               src={product.images[activeImage] || "/placeholder.webp"} 
               alt={product.name}
               fill
+              sizes="(max-width: 768px) 100vw, 448px"
               className="object-contain p-4 mix-blend-multiply transition-transform duration-500 hover:scale-105"
             />
             
@@ -140,9 +150,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
         </div>
 
         {/* Detalles (Derecha) */}
-        <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col overflow-y-auto">
+        <div className="w-full md:w-1/2 p-5 md:p-8 flex flex-col md:overflow-y-auto">
           <span className="text-xs font-bold tracking-widest text-blue-600 uppercase mb-2">{product.category}</span>
-          <h2 className="text-2xl font-black text-slate-900 leading-tight mb-2">{product.name}</h2>
+          <h2 className="text-xl md:text-2xl font-black text-slate-900 leading-tight mb-2 pr-0 md:pr-10">{product.name}</h2>
           
           <div className="flex items-center gap-2 mb-4">
             <div className="flex text-amber-400">
@@ -162,7 +172,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
             )}
           </div>
 
-          <p className="text-sm text-slate-600 mb-8 line-clamp-3">
+          <p className="text-sm text-slate-600 mb-6 md:mb-8 line-clamp-3">
             {product.description || "Un producto increíble con tecnología de punta para mejorar tu vida diaria."}
           </p>
 
@@ -178,7 +188,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                       setSelectedVariant(variant);
                       setQuantity(1);
                     }}
-                    className={`px-3 py-1.5 rounded-lg border-2 transition-all font-bold text-xs ${selectedVariant?.id === variant.id ? "border-blue-600 bg-blue-50 text-blue-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}
+                    className={`px-3.5 py-2 rounded-lg border-2 transition-all font-bold text-xs ${selectedVariant?.id === variant.id ? "border-blue-600 bg-blue-50 text-blue-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}
                   >
                     {variant.name}
                   </button>
@@ -188,7 +198,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
           )}
 
           {/* Acciones */}
-          <div className="mt-auto pt-6 border-t border-slate-100 flex flex-col gap-3">
+          <div className="mt-auto pt-4 md:pt-6 border-t border-slate-100 flex flex-col gap-3 sticky bottom-0 md:static bg-white -mx-5 px-5 md:mx-0 md:px-0 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-0 shadow-[0_-8px_16px_-12px_rgba(0,0,0,0.15)] md:shadow-none">
             {/* Alerta de Stock */}
             {currentStock > 0 && currentStock <= 5 && (
               <p className="text-orange-500 text-xs font-bold animate-pulse flex items-center gap-1.5">
@@ -212,7 +222,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   <button 
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
-                    className="text-slate-400 hover:text-blue-600 disabled:opacity-30 transition-colors p-1"
+                    className="text-slate-400 hover:text-blue-600 disabled:opacity-30 transition-colors p-2 -m-1"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -220,7 +230,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   <button 
                     onClick={() => setQuantity(q => Math.min(currentStock, q + 1))}
                     disabled={quantity >= currentStock}
-                    className="text-slate-400 hover:text-blue-600 disabled:opacity-30 transition-colors p-1"
+                    className="text-slate-400 hover:text-blue-600 disabled:opacity-30 transition-colors p-2 -m-1"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -241,7 +251,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 onClose();
                 router.push(`/producto/${product.id}`);
               }}
-              className="text-sm font-bold text-slate-500 hover:text-blue-600 transition underline underline-offset-4 text-center mt-2"
+              className="text-sm font-bold text-slate-500 hover:text-blue-600 transition underline underline-offset-4 text-center md:mt-2"
             >
               Ver todos los detalles
             </button>

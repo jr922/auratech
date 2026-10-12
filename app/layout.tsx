@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
@@ -18,6 +18,14 @@ import { GoogleTagManager } from '@next/third-parties/google';
 
 
 const inter = Inter({ subsets: ["latin"] });
+
+// viewport-fit=cover habilita env(safe-area-inset-*) en iPhone (notch / barra inferior)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0f172a",
+};
 
 export const metadata: Metadata = {
   title: "Aura Tech - Tu tienda de tecnología",
@@ -68,7 +76,7 @@ export default async function RootLayout({
           <Footer />
           <BottomNav />
           {/* <NewsletterModal /> */}
-          <Toaster position="bottom-right" richColors />
+          <Toaster position="bottom-right" richColors mobileOffset={{ bottom: 88, left: 12, right: 12 }} />
         </AuthProvider>
       </body>
     </html>

@@ -9,7 +9,7 @@ import { liveSearchProducts } from "@/app/actions/search";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl relative" }: { className?: string }) {
+export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl relative", autoFocus = false, onNavigate }: { className?: string; autoFocus?: boolean; onNavigate?: () => void }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') || "";
@@ -38,25 +38,37 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
 
   // Debounce search
   useEffect(() => {
+    // `cancelled` evita que una respuesta lenta de una búsqueda anterior pise a la más reciente
+    let cancelled = false;
     const timer = setTimeout(async () => {
       if (query.trim().length >= 2) {
         setIsSearching(true);
-        const data = await liveSearchProducts(query.trim());
-        setResults(data);
-        setIsSearching(false);
-        setIsOpen(true);
+        try {
+          const data = await liveSearchProducts(query.trim());
+          if (cancelled) return;
+          setResults(data);
+          setIsOpen(true);
+        } catch {
+          if (!cancelled) setResults([]);
+        } finally {
+          if (!cancelled) setIsSearching(false);
+        }
       } else {
         setResults([]);
         setIsOpen(false);
       }
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsOpen(false);
+    onNavigate?.();
     if (query.trim()) {
       router.push(`/tienda?q=${encodeURIComponent(query.trim())}`);
     } else {
@@ -76,6 +88,10 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
             if (query.length >= 2) setIsOpen(true);
           }}
           placeholder="Buscar por productos..."
+          autoFocus={autoFocus}
+          enterKeyHint="search"
+          aria-label="Buscar productos"
+          onKeyDown={(e) => { if (e.key === "Escape") setIsOpen(false); }}
           className="w-full bg-slate-50 border-slate-200 rounded-lg pl-4 pr-12 py-6 text-sm focus-visible:ring-blue-600 focus-visible:bg-white transition"
           autoComplete="off"
         />
@@ -83,6 +99,7 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
           type="submit" 
           variant="ghost" 
           size="icon" 
+          aria-label="Buscar"
           className="absolute right-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 hover:bg-transparent"
         >
           {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
@@ -101,7 +118,7 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
                 <li key={product.id}>
                   <Link 
                     href={`/producto/${product.id}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => { setIsOpen(false); onNavigate?.(); }}
                     className="flex items-center gap-4 px-4 py-3 hover:bg-blue-50 transition-colors group"
                   >
                     <div className="relative w-12 h-12 rounded-lg bg-slate-50 border border-slate-100 overflow-hidden flex-shrink-0">
@@ -130,7 +147,7 @@ export default function LiveSearch({ className = "hidden md:flex flex-1 max-w-xl
                   onClick={handleSubmit}
                   className="w-full text-center py-4 text-sm font-bold text-blue-600 hover:bg-blue-50 transition"
                 >
-                  Ver todos los resultados para "{query}"
+                  Ver todos los resultados para &quot;{query}&quot;
                 </button>
               </li>
             </ul>

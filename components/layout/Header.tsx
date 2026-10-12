@@ -9,10 +9,8 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import AuthDropdown from "./AuthDropdown";
-import { getCachedCategories } from "@/lib/api/categories";
 import LiveSearch from "./LiveSearch";
 
 import { useUIStore } from "@/store/uiStore";
@@ -32,16 +30,16 @@ export default function Header({ categories = [] }: { categories?: { name: strin
   
   const { items, removeItem, updateQuantity, totalItems, totalPrice, isHydrated, clearCart } = useCartStore();
   const wishlist = useWishlistStore();
-  const { data: session, status } = useSession();
+  
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4 md:gap-8">
+      <div className="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between gap-3 md:gap-8">
         
         {/* Menú Hamburguesa (Móvil) */}
         <div className="md:hidden">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <SheetTrigger className="text-slate-600 hover:text-blue-600 p-2 -ml-2">
+            <SheetTrigger aria-label="Abrir menú" className="text-slate-600 hover:text-blue-600 p-2.5 -ml-2.5">
               <Menu className="w-6 h-6" />
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 border-r-0 flex flex-col">
@@ -55,7 +53,7 @@ export default function Header({ categories = [] }: { categories?: { name: strin
                 
                 {/* Buscador Rápido en Menú Móvil */}
                 <div className="mb-6">
-                  <LiveSearch className="w-full relative" />
+                  <LiveSearch className="w-full relative" onNavigate={() => setIsMenuOpen(false)} />
                 </div>
 
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">Categorías</h3>
@@ -144,14 +142,14 @@ export default function Header({ categories = [] }: { categories?: { name: strin
               )}
             </SheetTrigger>
             <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col border-l-0">
-              <SheetHeader className="h-20 flex flex-row items-center justify-between px-6 border-b border-slate-100 shrink-0 m-0">
+              <SheetHeader className="h-16 sm:h-20 flex flex-row items-center justify-between px-4 sm:px-6 border-b border-slate-100 shrink-0 m-0">
                 <SheetTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
                   <ShoppingBag className="w-5 h-5 text-blue-600" />
                   Mi Carrito ({isHydrated ? totalItems() : 0})
                 </SheetTitle>
               </SheetHeader>
               
-              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4">
                 {items.length === 0 ? (
                   <div className="flex-1 flex flex-col items-center justify-center text-center mt-20">
                     <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-4">
@@ -186,7 +184,7 @@ export default function Header({ categories = [] }: { categories?: { name: strin
                           className="relative w-20 h-20 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden shrink-0 group-hover:border-blue-200 transition-colors"
                         >
                           {item.image ? (
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            <img src={item.image} alt={item.name} loading="lazy" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="text-[10px] text-slate-400">Img</span>
@@ -209,18 +207,19 @@ export default function Header({ categories = [] }: { categories?: { name: strin
                             <p className="font-bold text-blue-600 mt-1">S/ {item.price.toFixed(2)}</p>
                           </div>
                           <div className="flex items-center justify-between mt-2">
-                            <div className="flex items-center gap-3 bg-slate-50 rounded-lg px-2 py-1">
-                              <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="text-slate-500 hover:text-blue-600"><Minus className="w-3 h-3" /></button>
-                              <span className="text-sm font-semibold">{item.quantity}</span>
+                            <div className="flex items-center bg-slate-50 rounded-lg">
+                              <button onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label="Disminuir cantidad" className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-blue-600"><Minus className="w-4 h-4" /></button>
+                              <span className="text-sm font-semibold w-5 text-center">{item.quantity}</span>
                               <button 
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)} 
                                 disabled={item.quantity >= (item.maxStock || 99)}
-                                className={item.quantity >= (item.maxStock || 99) ? "text-slate-300 cursor-not-allowed" : "text-slate-500 hover:text-blue-600"}
+                                aria-label="Aumentar cantidad"
+                                className={`w-9 h-9 flex items-center justify-center ${item.quantity >= (item.maxStock || 99) ? "text-slate-300 cursor-not-allowed" : "text-slate-500 hover:text-blue-600"}`}
                               >
-                                <Plus className="w-3 h-3" />
+                                <Plus className="w-4 h-4" />
                               </button>
                             </div>
-                            <button onClick={() => removeItem(item.id)} className="text-slate-400 hover:text-red-500 p-1">
+                            <button onClick={() => removeItem(item.id)} aria-label="Quitar producto" className="text-slate-400 hover:text-red-500 w-9 h-9 flex items-center justify-center">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -232,7 +231,7 @@ export default function Header({ categories = [] }: { categories?: { name: strin
               </div>
 
               {items.length > 0 && (
-                <div className="border-t border-slate-100 p-6 bg-slate-50 shrink-0">
+                <div className="border-t border-slate-100 p-4 sm:p-6 bg-slate-50 shrink-0" style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}>
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-slate-600 font-medium">Subtotal</span>
                     <span className="text-xl font-black text-slate-900">S/ {isHydrated ? totalPrice().toFixed(2) : "0.00"}</span>
@@ -263,7 +262,7 @@ export default function Header({ categories = [] }: { categories?: { name: strin
       {/* Barra de Búsqueda Móvil Desplegable */}
       {isMobileSearchOpen && (
         <div className="md:hidden px-4 pb-4 pt-2 border-t border-slate-100 bg-white shadow-lg animate-in slide-in-from-top-2 duration-200">
-          <LiveSearch className="w-full relative" />
+          <LiveSearch className="w-full relative" autoFocus onNavigate={() => setIsMobileSearchOpen(false)} />
         </div>
       )}
     </header>

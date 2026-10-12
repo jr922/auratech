@@ -586,7 +586,7 @@ export default function CheckoutPage() {
                   className="mt-0.5 w-5 h-5 shrink-0 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                 />
                 <span className="text-xs sm:text-sm text-slate-600 group-hover:text-slate-800 transition">
-                  He leído y acepto los <a href="/terminos" target="_blank" className="text-blue-600 font-bold hover:underline">Términos y Condiciones</a> y la Política de Privacidad de Aura Tech.
+                  He leído y acepto los <a href="/politicas-de-privacidad" target="_blank" className="text-blue-600 font-bold hover:underline">Términos y Condiciones</a> y la Política de Privacidad de Aura Tech.
                 </span>
               </label>
               {errors.acceptTerms && <span className="text-xs text-red-500 font-bold">{errors.acceptTerms.message}</span>}

@@ -129,3 +129,52 @@
     @apply font-sans;
   }
 }
+
+/* ===== Utilidades usadas en la UI (antes no estaban definidas) ===== */
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .animate-bounce-short {
+    animation: bounce-short 0.6s ease-out 1;
+  }
+}
+
+@keyframes bounce-short {
+  0%, 100% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(-4px) scale(1.15); }
+  60% { transform: translateY(0) scale(0.95); }
+}
+
+/* ===== Mejoras globales para móviles ===== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    overflow-x: clip; /* evita scroll horizontal accidental sin romper position: sticky */
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Quita el retardo de doble-tap y el zoom accidental en controles */
+  a, button, summary, select, label, [role="button"] {
+    touch-action: manipulation;
+  }
+  /* Nunca permitir que una imagen/iframe desborde su contenedor */
+  img, video, iframe {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
