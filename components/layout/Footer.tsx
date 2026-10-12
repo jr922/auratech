@@ -36,10 +36,10 @@ export default function Footer() {
     <footer className="bg-slate-50 pt-12 md:pt-16 pb-28 md:pb-8 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4">
         {/* Main Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 md:gap-12 mb-8 md:mb-12">
           
           {/* Columna 1: Contacto / Logo */}
-          <div className="flex flex-col gap-6">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-3 text-2xl font-bold text-blue-600 tracking-tight">
               <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black">
                 AT
@@ -74,7 +74,7 @@ export default function Footer() {
 
           {/* Columna 2: Productos */}
           <div>
-            <h3 className="font-bold text-slate-900 text-lg mb-6">Productos</h3>
+            <h3 className="font-bold text-slate-900 text-base md:text-lg mb-4 md:mb-6">Productos</h3>
             <ul className="flex flex-col gap-3 text-sm text-slate-600">
               <li><Link href="/tienda?marca=apple" className="hover:text-blue-600 transition">Apple</Link></li>
               <li><Link href="/tienda?marca=amazon" className="hover:text-blue-600 transition">Amazon & Google</Link></li>
@@ -87,14 +87,14 @@ export default function Footer() {
 
           {/* Columna 3: Información */}
           <div>
-            <h3 className="font-bold text-slate-900 text-lg mb-6">Aura Tech</h3>
+            <h3 className="font-bold text-slate-900 text-base md:text-lg mb-4 md:mb-6">Aura Tech</h3>
             <ul className="flex flex-col gap-3 text-sm text-slate-600 mb-8">
               <li><Link href="/contacto" className="hover:text-blue-600 transition">Quiénes somos</Link></li>
               <li><Link href="/contacto" className="hover:text-blue-600 transition">Contáctanos</Link></li>
               <li><Link href="/reclamaciones" className="hover:text-blue-600 transition">Libro de Reclamaciones</Link></li>
             </ul>
 
-            <h3 className="font-bold text-slate-900 text-lg mb-6">Información</h3>
+            <h3 className="font-bold text-slate-900 text-base md:text-lg mb-4 md:mb-6">Información</h3>
             <ul className="flex flex-col gap-3 text-sm text-slate-600">
               <li><Link href="/politicas-de-privacidad" className="hover:text-blue-600 transition">Políticas de Privacidad</Link></li>
               <li><Link href="/politicas-de-privacidad" className="hover:text-blue-600 transition">Términos y Condiciones</Link></li>
@@ -103,9 +103,9 @@ export default function Footer() {
           </div>
 
           {/* Columna 4: Boletín */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             {/* 
-            <h3 className="font-bold text-slate-900 text-lg mb-6">Boletín</h3>
+            <h3 className="font-bold text-slate-900 text-base md:text-lg mb-4 md:mb-6">Boletín</h3>
             <p className="text-sm text-slate-600 mb-4">
               Suscríbete a nuestro boletín para ser el primero en recibir novedades, lanzamientos y ofertas exclusivas.
             </p>
@@ -128,7 +128,7 @@ export default function Footer() {
             </form>
             */}
             
-            <h3 className="font-bold text-slate-900 text-lg mb-6">Síguenos</h3>
+            <h3 className="font-bold text-slate-900 text-base md:text-lg mb-4 md:mb-6">Síguenos</h3>
             <div className="flex items-center gap-4">
               <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-10 h-10 bg-slate-200 hover:bg-blue-600 hover:text-white text-slate-600 rounded-full flex items-center justify-center transition">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>

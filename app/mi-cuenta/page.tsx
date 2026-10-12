@@ -205,10 +205,10 @@ function MiCuentaContent() {
   // ================= VISTA 1: NO LOGUEADO =================
   if (status === "unauthenticated") {
     return (
-      <div className="bg-slate-50 min-h-[80vh] py-16 px-4 flex justify-center items-center">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Mi cuenta</h1>
+      <div className="bg-slate-50 min-h-[80vh] py-8 md:py-16 px-4 flex justify-center items-center">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-5 sm:p-8">
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Mi cuenta</h1>
             <p className="text-slate-500 mt-2">
               {isRegistering ? "Crea una cuenta nueva." : "Accede para gestionar tus pedidos."}
             </p>
@@ -324,11 +324,43 @@ function MiCuentaContent() {
 
   // ================= VISTA 2: LOGUEADO =================
   return (
-    <div className="bg-slate-50 min-h-screen py-12 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
+    <div className="bg-slate-50 min-h-screen py-4 md:py-12 px-3 sm:px-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-8">
         
+        {/* NAVEGACIÓN MÓVIL: perfil compacto + pestañas desplazables */}
+        <div className="md:hidden bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-11 h-11 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-black text-lg shrink-0">
+              {session?.user?.name?.charAt(0).toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-bold text-slate-900 truncate">{session?.user?.name}</p>
+              <p className="text-xs text-slate-500 truncate">{session?.user?.email}</p>
+            </div>
+            <button onClick={() => signOut()} aria-label="Cerrar sesión" className="p-2.5 rounded-xl text-red-500 bg-red-50 active:bg-red-100 transition shrink-0">
+              <LogOut className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {[
+              { id: "escritorio", label: "Escritorio", Icon: Settings },
+              { id: "pedidos", label: "Pedidos", Icon: ShoppingBag },
+              { id: "direcciones", label: "Direcciones", Icon: MapPin },
+              { id: "detalles", label: "Mi perfil", Icon: User },
+            ].map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition ${activeTab === id ? "bg-blue-600 text-white shadow-md shadow-blue-200" : "bg-slate-100 text-slate-600"}`}
+              >
+                <Icon className="w-4 h-4" /> {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* SIDEBAR */}
-        <div className="w-full md:w-1/4">
+        <div className="hidden md:block w-full md:w-1/4">
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 sticky top-28">
             <div className="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100">
               <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-black text-xl">
@@ -366,32 +398,32 @@ function MiCuentaContent() {
 
         {/* CONTENIDO PRINCIPAL */}
         <div className="w-full md:w-3/4">
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 min-h-[600px]">
+          <div className="bg-white rounded-2xl md:rounded-3xl p-4 sm:p-8 md:p-12 shadow-sm border border-slate-100 md:min-h-[600px]">
             
             {activeTab === "escritorio" && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Hola {session?.user?.name}</h2>
-                <p className="text-slate-600 mb-8">
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6">Hola {session?.user?.name}</h2>
+                <p className="text-sm md:text-base text-slate-600 mb-6 md:mb-8">
                   Desde el escritorio de tu cuenta puedes ver tus pedidos recientes, gestionar tus direcciones de envío y facturación, y editar tu contraseña y los detalles de tu cuenta.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <button onClick={() => setActiveTab("pedidos")} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                  <button onClick={() => setActiveTab("pedidos")} className="p-3 sm:p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition">
                       <ShoppingBag className="w-6 h-6 text-blue-600" />
                     </div>
-                    <span className="font-bold text-slate-900">Mis Pedidos</span>
+                    <span className="font-bold text-slate-900 text-sm sm:text-base">Mis Pedidos</span>
                   </button>
-                  <button onClick={() => setActiveTab("direcciones")} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
+                  <button onClick={() => setActiveTab("direcciones")} className="p-3 sm:p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition">
                       <MapPin className="w-6 h-6 text-blue-600" />
                     </div>
-                    <span className="font-bold text-slate-900">Direcciones</span>
+                    <span className="font-bold text-slate-900 text-sm sm:text-base">Direcciones</span>
                   </button>
-                  <button onClick={() => setActiveTab("detalles")} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
+                  <button onClick={() => setActiveTab("detalles")} className="p-3 sm:p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-600 hover:bg-blue-50 transition group flex flex-col items-center text-center gap-3">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition">
                       <User className="w-6 h-6 text-blue-600" />
                     </div>
-                    <span className="font-bold text-slate-900">Perfil</span>
+                    <span className="font-bold text-slate-900 text-sm sm:text-base">Perfil</span>
                   </button>
                 </div>
               </div>
@@ -399,7 +431,7 @@ function MiCuentaContent() {
             
             {activeTab === "pedidos" && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Mis Pedidos</h2>
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6">Mis Pedidos</h2>
                 
                 {orders.length === 0 ? (
                   <div className="bg-slate-50 rounded-xl p-8 text-center border border-slate-100">
@@ -410,13 +442,13 @@ function MiCuentaContent() {
                 ) : (
                   <div className="flex flex-col gap-4">
                     {orders.map(order => (
-                      <div key={order.id} className="border border-slate-200 rounded-xl p-6 bg-white shadow-sm flex flex-col gap-4">
+                      <div key={order.id} className="border border-slate-200 rounded-xl p-4 md:p-6 bg-white shadow-sm flex flex-col gap-3 md:gap-4">
                         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                           <div>
                             <p className="font-bold text-slate-900">Pedido #{order.id.slice(-6).toUpperCase()}</p>
                             <p className="text-sm text-slate-500">{new Date(order.createdAt).toLocaleDateString('es-PE')} • {order.items?.length || 0} productos</p>
                           </div>
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center justify-between md:justify-start gap-4">
                             <span className="font-black text-blue-600 text-lg">S/ {order.total.toFixed(2)}</span>
                             <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                               order.status === 'CANCELLED' ? 'bg-red-100 text-red-600' :
@@ -431,7 +463,7 @@ function MiCuentaContent() {
                             </span>
                           </div>
                           <div className="md:ml-auto flex flex-col gap-2">
-                            <a href={`/pedido/${order.id}`} className="inline-block bg-slate-900 text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-blue-600 transition text-center">
+                            <a href={`/pedido/${order.id}`} className="block bg-slate-900 text-white text-sm font-bold px-4 py-3 md:py-2 rounded-lg hover:bg-blue-600 transition text-center">
                               Ver Seguimiento
                             </a>
                           </div>
@@ -439,9 +471,9 @@ function MiCuentaContent() {
                         
                         {/* INYECTANDO HISTORIAL DE AUDITORÍA */}
                         {order.history && order.history.length > 0 && (
-                          <div className="pt-4 border-t border-slate-100 pl-4 border-l-4 border-blue-600">
+                          <div className="pt-4 border-t border-slate-100 pl-3 md:pl-4 border-l-4 border-blue-600">
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Última Actualización</p>
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5">
                               <span className="text-sm font-bold text-slate-900">{order.history[0].status}</span>
                               <span className="text-xs text-slate-400">{new Date(order.history[0].createdAt).toLocaleString('es-PE')}</span>
                             </div>
@@ -457,17 +489,17 @@ function MiCuentaContent() {
 
             {activeTab === "direcciones" && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Mis Direcciones</h2>
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6">Mis Direcciones</h2>
                 <AddressBook />
               </div>
             )}
 
             {activeTab === "detalles" && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Detalles de la cuenta</h2>
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6">Detalles de la cuenta</h2>
                 <form onSubmit={handleUpdateProfile} className="flex flex-col gap-6">
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 mb-2">Nombre Completo</label>
                       <input 
@@ -490,7 +522,7 @@ function MiCuentaContent() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <label className="block text-sm font-bold text-slate-700 mb-2">Teléfono</label>
                       <input 
@@ -529,10 +561,10 @@ function MiCuentaContent() {
 
                 </form>
 
-                <div className="mt-12 border-t border-slate-100 pt-12">
+                <div className="mt-8 md:mt-12 border-t border-slate-100 pt-8 md:pt-12">
                   <h2 className="text-xl font-black text-slate-900 mb-6">Cambiar contraseña</h2>
                   <form onSubmit={handleChangePassword} className="flex flex-col gap-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <div>
                         <label className="block text-sm font-bold text-slate-700 mb-2">Contraseña Actual</label>
                         <input 
@@ -545,7 +577,7 @@ function MiCuentaContent() {
                         />
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <div>
                         <label className="block text-sm font-bold text-slate-700 mb-2">Nueva Contraseña</label>
                         <input 

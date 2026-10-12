@@ -43,15 +43,15 @@ export default function ContactoPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-16 px-4">
+    <div className="bg-slate-50 min-h-screen py-6 md:py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-5 sm:p-8 md:p-12 rounded-3xl shadow-sm border border-slate-100">
           
           {/* Columna Izquierda (Info) */}
           <div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-8">Ponte en contacto</h1>
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-6 md:mb-8">Ponte en contacto</h1>
             
-            <div className="flex flex-col gap-6 mb-12">
+            <div className="flex flex-col gap-5 md:gap-6 mb-8 md:mb-12">
               <div className="flex items-start gap-4 text-slate-600">
                 <MapPin className="w-6 h-6 text-blue-600 shrink-0" />
                 <div>
@@ -76,14 +76,21 @@ export default function ContactoPage() {
             </div>
 
             {/* Div Cuadrado Gris para el Mapa */}
-            <div className="w-full h-[300px] bg-slate-200 rounded-2xl flex items-center justify-center border border-slate-300">
-              <span className="text-slate-500 font-bold">[Mapa de Google]</span>
+            <div className="w-full h-[220px] md:h-[300px] bg-slate-200 rounded-2xl overflow-hidden border border-slate-300">
+              <iframe
+                title="Ubicación de Aura Tech"
+                src="https://maps.google.com/maps?q=Av.+Garcilaso+de+la+Vega+1358,+Lima,+Peru&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </div>
 
           {/* Columna Derecha (Formulario) */}
           <div>
-            <h2 className="text-2xl font-black text-slate-900 mb-6">Envíanos un mensaje</h2>
+            <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-5 md:mb-6">Envíanos un mensaje</h2>
             
             {status === "error" && (
               <div className="bg-red-50 text-red-700 border border-red-200 p-4 rounded-xl mb-6 font-bold text-sm">

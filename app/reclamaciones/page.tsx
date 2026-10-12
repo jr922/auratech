@@ -73,11 +73,11 @@ export default function ReclamacionesPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-16 px-4">
+    <div className="bg-slate-50 min-h-screen py-8 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
         
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-4">Libro de Reclamaciones</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3 md:mb-4">Libro de Reclamaciones</h1>
           <p className="text-slate-600">
             Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, 
             esta institución cuenta con un Libro de Reclamaciones a tu disposición.

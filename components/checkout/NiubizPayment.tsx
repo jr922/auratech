@@ -72,7 +72,7 @@ export default function NiubizPayment({ orderId, total, error }: Props) {
   }, [startedFor, orderId]);
 
   return (
-    <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 max-w-xl w-full">
+    <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-100 max-w-xl w-full">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
           <Lock className="w-6 h-6 text-blue-600" />

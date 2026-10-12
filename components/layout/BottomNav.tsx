@@ -13,6 +13,9 @@ export default function BottomNav() {
   const { items: wishlistItems, isHydrated: wishHydrated } = useWishlistStore();
   const openCart = useUIStore((state) => state.openCart);
 
+  // El panel de administración tiene su propia navegación
+  if (pathname.startsWith("/admin")) return null;
+
   const navItems = [
     { name: "Inicio", href: "/", icon: Home },
     { name: "Explorar", href: "/tienda", icon: Search },
@@ -20,33 +23,38 @@ export default function BottomNav() {
     { name: "Perfil", href: "/mi-cuenta", icon: User },
   ];
 
+  const itemClass = (active: boolean) =>
+    `relative flex-1 flex flex-col items-center gap-0.5 py-1 transition-colors active:scale-95 ${
+      active ? "text-blue-600" : "text-slate-400 hover:text-slate-900"
+    }`;
+
   return (
     <div 
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-slate-200 px-6 pt-3 shadow-[0_-5px_20px_-15px_rgba(0,0,0,0.1)]"
-      style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 px-2 pt-2 shadow-[0_-5px_20px_-15px_rgba(0,0,0,0.1)]"
+      style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom))' }}
     >
-      <nav className="flex items-center justify-between">
+      <nav className="flex items-center justify-between" aria-label="Navegación principal">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
           const Icon = item.icon;
 
           return (
             <Link 
               key={item.name} 
               href={item.href}
-              className={`relative flex flex-col items-center gap-1 min-w-[50px] transition-colors ${
-                isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-900"
-              }`}
+              aria-current={isActive ? "page" : undefined}
+              className={itemClass(isActive)}
             >
+              {isActive && <span className="absolute -top-2 h-0.5 w-8 rounded-full bg-blue-600" />}
               <div className="relative">
                 <Icon className={`w-6 h-6 ${isActive ? "fill-current" : ""}`} />
                 {item.count !== undefined && item.count > 0 && (
-                  <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce-short">
+                  <span className="absolute -top-1.5 -right-2.5 bg-red-500 text-white text-[9px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center animate-bounce-short">
                     {item.count}
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-bold ${isActive ? "opacity-100" : "opacity-0"} transition-opacity`}>
+              <span className="text-[10px] font-bold leading-none">
                 {item.name}
               </span>
             </Link>
@@ -56,17 +64,18 @@ export default function BottomNav() {
         {/* Botón Especial para el Carrito (Abre el Modal, no cambia de página) */}
         <button 
           onClick={openCart}
-          className="relative flex flex-col items-center gap-1 min-w-[50px] text-slate-400 hover:text-slate-900 transition-colors"
+          aria-label="Abrir carrito"
+          className={itemClass(false)}
         >
           <div className="relative">
             <ShoppingBag className="w-6 h-6" />
             {cartHydrated && totalItems() > 0 && (
-              <span className="absolute -top-1 -right-2 bg-blue-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce-short">
+              <span className="absolute -top-1.5 -right-2.5 bg-blue-600 text-white text-[9px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center animate-bounce-short">
                 {totalItems()}
               </span>
             )}
           </div>
-          <span className="text-[10px] font-bold opacity-0 transition-opacity">
+          <span className="text-[10px] font-bold leading-none">
             Carrito
           </span>
         </button>

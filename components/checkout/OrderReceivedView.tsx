@@ -30,19 +30,19 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
   };
 
   return (
-    <div className="bg-white min-h-screen pt-12 pb-24">
+    <div className="bg-white min-h-screen pt-6 md:pt-12 pb-24">
       <div className="max-w-3xl mx-auto px-4">
         
         {/* ENCABEZADO */}
-        <div className="flex flex-col items-center text-center mb-12">
+        <div className="flex flex-col items-center text-center mb-8 md:mb-12">
           <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 animate-bounce-short ${isPaid ? "bg-emerald-100" : "bg-orange-100"}`}>
             {isPaid ? <CheckCircle2 className="w-10 h-10 text-emerald-600" /> : <Clock className="w-10 h-10 text-orange-500" />}
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">¡Pedido Recibido!</h1>
           {isPaid ? (
-            <p className="text-slate-500 text-lg">Gracias por tu compra. Tu pedido está en estado <span className="font-bold text-emerald-600">PAGADO Y CONFIRMADO</span>.</p>
+            <p className="text-slate-500 text-base md:text-lg">Gracias por tu compra. Tu pedido está en estado <span className="font-bold text-emerald-600">PAGADO Y CONFIRMADO</span>.</p>
           ) : (
-            <p className="text-slate-500 text-lg">Gracias por tu compra. Tu pedido está en estado <span className="font-bold text-orange-500">PENDIENTE DE PAGO</span>.</p>
+            <p className="text-slate-500 text-base md:text-lg">Gracias por tu compra. Tu pedido está en estado <span className="font-bold text-orange-500">PENDIENTE DE PAGO</span>.</p>
           )}
           {isCard && !isPaid && (
             <a href={`/pago/${orderId}`} className="mt-6 inline-flex items-center justify-center bg-blue-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-700 transition">
@@ -52,7 +52,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
         </div>
 
         {/* RESUMEN DEL PEDIDO */}
-        <div className="flex flex-col md:flex-row justify-between bg-slate-50 p-6 rounded-2xl mb-10 text-sm gap-4">
+        <div className="flex flex-col md:flex-row justify-between bg-slate-50 p-4 md:p-6 rounded-2xl mb-6 md:mb-10 text-sm gap-3 md:gap-4">
           <div>
             <span className="block text-slate-400 font-bold mb-1">NÚMERO DE PEDIDO</span>
             <span className="font-black text-slate-900 text-lg">#{shortOrderId}</span>
@@ -74,7 +74,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
         {/* INSTRUCCIONES DE PAGO YAPE/PLIN */}
         {paymentMethod === "yape" || paymentMethod === "plin" ? (
           !isPaid && (
-            <div className="bg-white border-2 border-purple-600 rounded-3xl p-8 shadow-lg shadow-purple-100 text-center relative overflow-hidden mb-10">
+            <div className="bg-white border-2 border-purple-600 rounded-3xl p-4 sm:p-8 shadow-lg shadow-purple-100 text-center relative overflow-hidden mb-6 md:mb-10">
               <div className="absolute top-0 left-0 w-full bg-purple-600 text-white text-xs font-bold py-1.5 uppercase tracking-widest">
                 Acción Requerida para Procesar el Envío
               </div>
@@ -84,7 +84,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
                 Por favor, realiza el pago mediante Yape o Plin al número indicado abajo y envíanos la captura de pantalla por WhatsApp para confirmar tu pedido.
               </p>
 
-              <div className="flex flex-col md:flex-row items-center justify-center gap-12">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
                 
                 {/* QR Yape */}
                 <div className="flex flex-col items-center gap-4">
@@ -103,8 +103,8 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
                 <div className="flex flex-col items-center md:items-start gap-6">
                   <div>
                     <span className="block text-slate-400 font-bold mb-2">TITULAR: LUIS JAVIER JUNIOR NAJERA QUISPE</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-4xl font-black text-slate-900 tracking-wider">{phoneNumber}</span>
+                    <div className="flex items-center justify-center md:justify-start gap-3 sm:gap-4">
+                      <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-wide sm:tracking-wider">{phoneNumber}</span>
                       <button 
                         onClick={copyToClipboard}
                         className="w-10 h-10 bg-slate-100 hover:bg-purple-100 hover:text-purple-600 rounded-xl flex items-center justify-center text-slate-500 transition-colors relative"
@@ -132,7 +132,7 @@ export default function OrderReceivedView({ orderId, status, paymentMethod, tota
             </div>
           )
         ) : paymentMethod === "transfer" && !isPaid ? (
-          <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-lg shadow-blue-100 text-center relative overflow-hidden mb-10">
+          <div className="bg-white border-2 border-blue-600 rounded-3xl p-4 sm:p-8 shadow-lg shadow-blue-100 text-center relative overflow-hidden mb-6 md:mb-10">
             <div className="absolute top-0 left-0 w-full bg-blue-600 text-white text-xs font-bold py-1.5 uppercase tracking-widest">
               Acción Requerida para Procesar el Envío
             </div>

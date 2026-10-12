@@ -1,8 +1,8 @@
 export default function PoliticasPage() {
   return (
-    <div className="bg-white min-h-screen py-16 px-4">
+    <div className="bg-white min-h-screen py-8 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-10">Políticas de Privacidad</h1>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-6 md:mb-10">Políticas de Privacidad</h1>
         
         <div className="text-slate-600 leading-relaxed space-y-8">
           <div>

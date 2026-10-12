@@ -7,9 +7,9 @@ import {
 
 export default function PreguntasFrecuentesPage() {
   return (
-    <div className="bg-slate-50 min-h-[70vh] py-16 px-4">
+    <div className="bg-slate-50 min-h-[70vh] py-8 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-4 text-center">Preguntas Frecuentes</h1>
+        <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3 md:mb-4 text-center">Preguntas Frecuentes</h1>
         <p className="text-slate-500 text-center mb-12">Encuentra respuestas rápidas a las dudas más comunes de nuestros clientes.</p>
         
         <div className="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-100">

@@ -77,7 +77,7 @@ export default function AdminOrdersTable({ initialOrders }: { initialOrders: any
   return (
     <>
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row justify-between gap-4 md:items-center">
+        <div className="p-4 md:p-6 border-b border-slate-200 flex flex-col md:flex-row justify-between gap-4 md:items-center">
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input 
@@ -90,7 +90,7 @@ export default function AdminOrdersTable({ initialOrders }: { initialOrders: any
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm font-semibold uppercase tracking-wider">
@@ -157,11 +157,60 @@ export default function AdminOrdersTable({ initialOrders }: { initialOrders: any
             </tbody>
           </table>
         </div>
+
+        {/* Vista móvil: tarjetas */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {filteredOrders.length === 0 ? (
+            <div className="p-8 text-center text-slate-500">
+              <Package className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+              No se encontraron pedidos.
+            </div>
+          ) : (
+            filteredOrders.map(order => (
+              <div key={order.id} className="p-4 flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-mono text-sm font-bold text-slate-900">#{order.id.slice(-6).toUpperCase()}</p>
+                    <p className="font-bold text-slate-900 truncate">{order.user?.name || order.customerName || "Invitado"}</p>
+                    <p className="text-xs text-slate-500 truncate">{order.user?.email || order.customerEmail || "Sin correo"}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="font-black text-slate-900">S/ {order.total.toFixed(2)}</p>
+                    <p className="text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString('es-PE')}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select
+                    disabled={loadingId === order.id}
+                    value={order.status}
+                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                    className={`flex-1 min-w-0 text-sm font-bold px-3 py-2.5 rounded-lg border cursor-pointer outline-none ${getStatusColor(order.status)}`}
+                  >
+                    <option value="PENDING">PENDIENTE</option>
+                    <option value="PAID">PAGADO (Confirmar)</option>
+                    <option value="PROCESSING">PROCESANDO</option>
+                    <option value="SHIPPED">ENVIAR (Ingresar Tracking)</option>
+                    <option value="DELIVERED">ENTREGADO</option>
+                    <option value="CANCELLED">CANCELADO</option>
+                  </select>
+                  <Link href={`/pedido/${order.id}`} target="_blank" className="p-2.5 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg inline-flex items-center transition shrink-0" title="Ver detalle">
+                    <Eye className="w-5 h-5" />
+                  </Link>
+                </div>
+                {order.status === "SHIPPED" && order.trackingNumber && (
+                  <span className="text-[11px] font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 self-start">
+                    {order.courier}: {order.trackingNumber}
+                  </span>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {showDispatchModal && dispatchOrderObj && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
-          <div className="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
+          <div className="bg-white w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl p-5 sm:p-6 shadow-2xl">
             <h3 className="text-xl font-black text-slate-900 mb-2 flex items-center gap-2">
               <Truck className="w-6 h-6 text-blue-600" /> Despachar Pedido
             </h3>

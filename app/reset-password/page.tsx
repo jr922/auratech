@@ -49,8 +49,8 @@ function ResetPasswordContent() {
 
   if (!token) {
     return (
-      <div className="bg-slate-50 min-h-[80vh] py-16 px-4 flex justify-center items-center">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-8 text-center">
+      <div className="bg-slate-50 min-h-[80vh] py-8 md:py-16 px-4 flex justify-center items-center">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-5 sm:p-8 text-center">
           <h1 className="text-2xl font-black text-slate-900 mb-4">Enlace Inválido</h1>
           <p className="text-slate-500 mb-6">No se encontró un token de recuperación válido en la URL.</p>
           <button onClick={() => router.push("/recuperar-password")} className="bg-blue-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-blue-700 transition">
@@ -62,8 +62,8 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="bg-slate-50 min-h-[80vh] py-16 px-4 flex justify-center items-center">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+    <div className="bg-slate-50 min-h-[80vh] py-8 md:py-16 px-4 flex justify-center items-center">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-5 sm:p-8">
         
         {success ? (
           <div className="text-center">

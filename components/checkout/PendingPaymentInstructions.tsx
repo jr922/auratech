@@ -26,7 +26,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
 
   if (paymentMethod === "yape" || paymentMethod === "plin") {
     return (
-      <div className="bg-white border-2 border-purple-600 rounded-3xl p-8 shadow-lg shadow-purple-100 text-center relative overflow-hidden mb-10 w-full max-w-4xl mx-auto">
+      <div className="bg-white border-2 border-purple-600 rounded-3xl p-4 sm:p-8 shadow-lg shadow-purple-100 text-center relative overflow-hidden mb-6 md:mb-10 w-full max-w-4xl mx-auto">
         <div className="absolute top-0 left-0 w-full bg-purple-600 text-white text-xs font-bold py-1.5 uppercase tracking-widest">
           Acción Requerida para Procesar el Envío
         </div>
@@ -36,7 +36,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
           Por favor, realiza el pago mediante Yape o Plin al número indicado abajo y envíanos la captura de pantalla por WhatsApp para confirmar tu pedido.
         </p>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
           
           {/* QR Yape */}
           <div className="flex flex-col items-center gap-4">
@@ -56,7 +56,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
             <div>
               <span className="block text-slate-400 font-bold mb-2 text-sm text-center md:text-left">TITULAR: LUIS JAVIER JUNIOR NAJERA QUISPE</span>
               <div className="flex items-center gap-4">
-                <span className="text-4xl font-black text-slate-900 tracking-wider">{phoneNumber}</span>
+                <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-wide sm:tracking-wider">{phoneNumber}</span>
                 <button 
                   onClick={copyToClipboard}
                   className="w-10 h-10 bg-slate-100 hover:bg-purple-100 hover:text-purple-600 rounded-xl flex items-center justify-center text-slate-500 transition-colors relative"
@@ -87,7 +87,7 @@ export default function PendingPaymentInstructions({ paymentMethod, isPaid, orde
 
   if (paymentMethod === "transfer") {
     return (
-      <div className="bg-white border-2 border-blue-600 rounded-3xl p-8 shadow-lg shadow-blue-100 text-center relative overflow-hidden mb-10 w-full max-w-4xl mx-auto">
+      <div className="bg-white border-2 border-blue-600 rounded-3xl p-4 sm:p-8 shadow-lg shadow-blue-100 text-center relative overflow-hidden mb-6 md:mb-10 w-full max-w-4xl mx-auto">
         <div className="absolute top-0 left-0 w-full bg-blue-600 text-white text-xs font-bold py-1.5 uppercase tracking-widest">
           Acción Requerida para Procesar el Envío
         </div>

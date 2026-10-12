@@ -256,16 +256,16 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+    <div className="bg-slate-50 min-h-screen py-4 md:py-8 px-3 sm:px-4">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-5 md:gap-8">
         
         {/* COLUMNA IZQUIERDA: FORMULARIOS */}
         <div className="w-full lg:w-3/5">
           <form id="checkout-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             
             {/* FACTURACIÓN Y ENVÍO */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-              <h2 className="text-xl font-black text-slate-900 mb-6 border-b border-slate-100 pb-4">
+            <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-slate-100">
+              <h2 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 border-b border-slate-100 pb-3 md:pb-4">
                 Tus Datos y Dirección de Envío
               </h2>
 
@@ -273,7 +273,7 @@ export default function CheckoutPage() {
                 <Label className="mb-3 block font-bold text-slate-800">Tipo de Comprobante</Label>
                 <RadioGroup 
                   defaultValue="boleta" 
-                  className="flex gap-4"
+                  className="flex flex-wrap gap-x-6 gap-y-3"
                   onValueChange={(v) => setValue("receiptType", v as "boleta" | "factura")}
                 >
                   <div className="flex items-center space-x-2">
@@ -329,7 +329,7 @@ export default function CheckoutPage() {
                   <Label className="mb-3 block font-bold text-slate-800">Tipo de Entrega</Label>
                   <RadioGroup 
                     defaultValue="domicilio" 
-                    className="flex gap-4"
+                    className="flex flex-wrap gap-x-6 gap-y-3"
                     onValueChange={(v) => setValue("deliveryType", v as "domicilio" | "tienda")}
                   >
                     <div className="flex items-center space-x-2">
@@ -351,7 +351,7 @@ export default function CheckoutPage() {
                         <select
                           value={selectedAddressId}
                           onChange={(e) => applySavedAddress(e.target.value)}
-                          className="flex h-10 w-full rounded-md border border-slate-200 bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="flex h-11 md:h-10 w-full rounded-md border border-slate-200 bg-background px-3 py-2 text-base md:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
                           <option value="">Ingresar una dirección nueva</option>
                           {savedAddresses.map((a) => (
@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                             setValue("district", "", { shouldValidate: true });
                           }
                         })} 
-                        className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.department ? "border-red-500" : "border-slate-200"}`}
+                        className={`flex h-11 md:h-10 w-full rounded-md border bg-background px-3 py-2 text-base md:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.department ? "border-red-500" : "border-slate-200"}`}
                       >
                         <option value="">Selecciona...</option>
                         {PERU_UBIGEO.map(d => (
@@ -390,7 +390,7 @@ export default function CheckoutPage() {
                           }
                         })} 
                         disabled={!selectedDepartment}
-                        className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.province ? "border-red-500" : "border-slate-200"}`}
+                        className={`flex h-11 md:h-10 w-full rounded-md border bg-background px-3 py-2 text-base md:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.province ? "border-red-500" : "border-slate-200"}`}
                       >
                         <option value="">Selecciona...</option>
                         {selectedDepartment && PERU_UBIGEO.find(d => d.department === selectedDepartment)?.provinces.map(p => (
@@ -404,7 +404,7 @@ export default function CheckoutPage() {
                       <select 
                         {...register("district")} 
                         disabled={!selectedProvince}
-                        className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.district ? "border-red-500" : "border-slate-200"}`}
+                        className={`flex h-11 md:h-10 w-full rounded-md border bg-background px-3 py-2 text-base md:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.district ? "border-red-500" : "border-slate-200"}`}
                       >
                         <option value="">Selecciona...</option>
                         {selectedDepartment && selectedProvince && PERU_UBIGEO.find(d => d.department === selectedDepartment)?.provinces.find(p => p.province === selectedProvince)?.districts.map(dist => (
@@ -432,19 +432,19 @@ export default function CheckoutPage() {
             </div>
 
             {/* MÉTODO DE PAGO */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-              <h2 className="text-xl font-black text-slate-900 mb-6 border-b border-slate-100 pb-4">
+            <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-slate-100">
+              <h2 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 border-b border-slate-100 pb-3 md:pb-4">
                 Método de Pago
               </h2>
               
               <RadioGroup 
                 value={paymentMethod} 
                 onValueChange={(val) => setValue("paymentMethod", val as "yape" | "plin" | "card" | "transfer")}
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-3 md:gap-4"
               >
-                <div className={`flex items-center space-x-2 border-2 p-4 rounded-xl cursor-pointer ${paymentMethod === 'yape' ? 'border-purple-600 bg-purple-50' : 'border-slate-100'}`}>
+                <div className={`flex items-center space-x-3 border-2 p-3 sm:p-4 rounded-xl cursor-pointer ${paymentMethod === 'yape' ? 'border-purple-600 bg-purple-50' : 'border-slate-100'}`}>
                   <RadioGroupItem value="yape" id="yape" />
-                  <Label htmlFor="yape" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between w-full">
+                  <Label htmlFor="yape" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between gap-2 w-full min-w-0 text-sm md:text-base">
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span>Yape / Plin (Transferencia Directa)</span>
                       <YapeLogo />
@@ -453,9 +453,9 @@ export default function CheckoutPage() {
                     <span className="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">QR</span>
                   </Label>
                 </div>
-                <div className={`flex items-center space-x-2 border-2 p-4 rounded-xl cursor-pointer ${paymentMethod === 'card' ? 'border-blue-600 bg-blue-50' : 'border-slate-100'}`}>
+                <div className={`flex items-center space-x-3 border-2 p-3 sm:p-4 rounded-xl cursor-pointer ${paymentMethod === 'card' ? 'border-blue-600 bg-blue-50' : 'border-slate-100'}`}>
                   <RadioGroupItem value="card" id="card" />
-                  <Label htmlFor="card" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between w-full">
+                  <Label htmlFor="card" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between gap-2 w-full min-w-0 text-sm md:text-base">
                     <div className="flex flex-col">
                       <span>Tarjeta de Crédito / Débito (Automático)</span>
                       <div className="flex flex-wrap items-center gap-2 mt-1.5">
@@ -469,9 +469,9 @@ export default function CheckoutPage() {
                     <NiubizLogo />
                   </Label>
                 </div>
-                <div className={`flex items-center space-x-2 border-2 p-4 rounded-xl cursor-pointer ${paymentMethod === 'transfer' ? 'border-slate-600 bg-slate-100' : 'border-slate-100'}`}>
+                <div className={`flex items-center space-x-3 border-2 p-3 sm:p-4 rounded-xl cursor-pointer ${paymentMethod === 'transfer' ? 'border-slate-600 bg-slate-100' : 'border-slate-100'}`}>
                   <RadioGroupItem value="transfer" id="transfer" />
-                  <Label htmlFor="transfer" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between w-full">
+                  <Label htmlFor="transfer" className="font-bold cursor-pointer text-slate-800 flex items-center justify-between gap-2 w-full min-w-0 text-sm md:text-base">
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span>Transferencia Bancaria</span>
                       <div className="flex gap-1.5 opacity-90">
@@ -489,12 +489,12 @@ export default function CheckoutPage() {
 
         {/* COLUMNA DERECHA: RESUMEN DEL PEDIDO */}
         <div className="w-full lg:w-2/5">
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 sticky top-28">
-            <h2 className="text-xl font-black text-slate-900 mb-6">Tu Pedido</h2>
+          <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-slate-100 lg:sticky lg:top-28">
+            <h2 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6">Tu Pedido</h2>
             
-            <div className="flex flex-col gap-4 mb-6 max-h-60 overflow-y-auto pr-2">
+            <div className="flex flex-col gap-3 md:gap-4 mb-4 md:mb-6 max-h-52 md:max-h-60 overflow-y-auto pr-1 md:pr-2">
               {items.map(item => (
-                <div key={item.id} className="flex gap-4">
+                <div key={item.id} className="flex gap-3 md:gap-4">
                   <div className="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden shrink-0 relative border border-slate-100">
                     {item.image ? (
                       <Image src={item.image} alt={item.name} width={64} height={64} className="w-full h-full object-cover" />
@@ -505,7 +505,7 @@ export default function CheckoutPage() {
                     )}
                   </div>
                   <div className="flex-1 flex flex-col justify-center">
-                    <h4 className="text-sm font-bold text-slate-800 line-clamp-1">{item.name}</h4>
+                    <h4 className="text-sm font-bold text-slate-800 line-clamp-2 leading-snug">{item.name}</h4>
                     <span className="text-xs text-slate-500 mb-1">Cant: {item.quantity}</span>
                     <span className="text-sm font-black text-blue-600">S/ {(item.price * item.quantity).toFixed(2)}</span>
                   </div>
@@ -572,20 +572,20 @@ export default function CheckoutPage() {
                 <span>Envío</span>
                 <span>S/ {shipping.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-xl font-black text-slate-900 mt-2 pt-4 border-t border-slate-100">
+              <div className="flex justify-between text-lg md:text-xl font-black text-slate-900 mt-2 pt-4 border-t border-slate-100">
                 <span>Total</span>
                 <span>S/ {finalTotal.toFixed(2)}</span>
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col gap-2">
-              <label className="flex items-start gap-2 cursor-pointer group">
+            <div className="mt-6 md:mt-8 flex flex-col gap-2">
+              <label className="flex items-start gap-3 cursor-pointer group">
                 <input 
                   type="checkbox" 
                   {...register("acceptTerms")}
-                  className="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+                  className="mt-0.5 w-5 h-5 shrink-0 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                 />
-                <span className="text-sm text-slate-600 group-hover:text-slate-800 transition">
+                <span className="text-xs sm:text-sm text-slate-600 group-hover:text-slate-800 transition">
                   He leído y acepto los <a href="/terminos" target="_blank" className="text-blue-600 font-bold hover:underline">Términos y Condiciones</a> y la Política de Privacidad de Aura Tech.
                 </span>
               </label>

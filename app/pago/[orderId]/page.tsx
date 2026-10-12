@@ -39,7 +39,7 @@ export default async function PagoPage(props: {
   const cannotPay = order.status !== "PENDING";
 
   return (
-    <div className="bg-slate-50 min-h-[80vh] py-12 px-4 flex justify-center">
+    <div className="bg-slate-50 min-h-[80vh] py-6 md:py-12 px-3 sm:px-4 flex justify-center">
       {cannotPay ? (
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 max-w-xl w-full text-center">
           <h1 className="text-2xl font-black text-slate-900 mb-3">Este pedido ya no admite pago</h1>

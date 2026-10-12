@@ -37,21 +37,21 @@ export default function RastreoPage() {
   return (
     <div className="bg-slate-50 min-h-[80vh] flex flex-col">
       {/* Header Visual */}
-      <div className="bg-slate-900 py-16 px-4 relative overflow-hidden">
+      <div className="bg-slate-900 pt-10 pb-28 md:pt-16 md:pb-32 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/20 blur-[100px] rounded-full pointer-events-none"></div>
         <div className="max-w-2xl mx-auto text-center relative z-10">
-          <div className="w-16 h-16 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6">
             <Search className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">Rastrea tu pedido</h1>
-          <p className="text-slate-400 text-lg">Ingresa tu número de pedido y el correo con el que realizaste la compra para ver el estado de tu envío en tiempo real.</p>
+          <h1 className="text-3xl md:text-5xl font-black text-white mb-3 md:mb-4 tracking-tight">Rastrea tu pedido</h1>
+          <p className="text-slate-400 text-sm md:text-lg">Ingresa tu número de pedido y el correo con el que realizaste la compra para ver el estado de tu envío en tiempo real.</p>
         </div>
       </div>
 
       {/* Formulario de Búsqueda */}
-      <div className="flex-1 px-4 py-12">
-        <div className="max-w-md mx-auto -mt-24 relative z-20 bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
-          <form onSubmit={handleSearch} className="flex flex-col gap-6">
+      <div className="flex-1 px-4 pb-12">
+        <div className="max-w-md mx-auto -mt-20 md:-mt-24 relative z-20 bg-white rounded-3xl p-5 sm:p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
+          <form onSubmit={handleSearch} className="flex flex-col gap-5 md:gap-6">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2">Número de Pedido</label>
               <Input 
@@ -91,7 +91,7 @@ export default function RastreoPage() {
         </div>
         
         {/* Features Info */}
-        <div className="max-w-4xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center px-4">
+        <div className="max-w-4xl mx-auto mt-10 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center px-4">
           <div className="flex flex-col items-center">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4"><Package className="w-6 h-6" /></div>
             <h3 className="font-bold text-slate-900 mb-2">Empaque Seguro</h3>

@@ -26,8 +26,8 @@ export default function RecuperarPasswordPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-[80vh] py-16 px-4 flex justify-center items-center">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+    <div className="bg-slate-50 min-h-[80vh] py-8 md:py-16 px-4 flex justify-center items-center">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-sm border border-slate-100 p-5 sm:p-8">
         
         <div className="mb-8">
           <a href="/mi-cuenta" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-6">

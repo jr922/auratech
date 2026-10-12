@@ -50,22 +50,22 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
   const currentLevel = statusLevels[order.status] || 0;
 
   return (
-    <div className="bg-slate-50 min-h-screen py-12 px-4">
+    <div className="bg-slate-50 min-h-screen py-5 md:py-12 px-3 sm:px-4">
       <div className="max-w-4xl mx-auto">
         
-        <Link href={session?.user ? "/mi-cuenta" : "/"} className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold mb-8 transition">
+        <Link href={session?.user ? "/mi-cuenta" : "/"} className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold mb-4 md:mb-8 transition">
           <ChevronLeft className="w-5 h-5" /> {session?.user ? "Volver a mis pedidos" : "Volver a la tienda"}
         </Link>
 
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-slate-100 pb-8">
+        <div className="bg-white rounded-3xl p-4 sm:p-8 shadow-sm border border-slate-100 mb-5 md:mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 mb-6 md:mb-8 border-b border-slate-100 pb-6 md:pb-8">
             <div>
               <h1 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">Pedido #{order.id.slice(-6).toUpperCase()}</h1>
               <p className="text-slate-500 font-medium">Realizado el {new Date(order.createdAt).toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
-            <div className="text-right">
+            <div className="md:text-right">
               <p className="text-sm text-slate-500 font-medium mb-1">Total Pagado</p>
-              <p className="text-3xl font-black text-slate-900">S/ {order.total.toFixed(2)}</p>
+              <p className="text-2xl md:text-3xl font-black text-slate-900">S/ {order.total.toFixed(2)}</p>
             </div>
           </div>
 
@@ -77,14 +77,14 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
           />
 
           {order.status === "PENDING" && order.paymentMethod === "card" && (
-            <div className="mb-8 bg-orange-50 border-2 border-orange-200 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="mb-6 md:mb-8 bg-orange-50 border-2 border-orange-200 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6">
               <div>
                 <h3 className="text-lg font-black text-orange-900 mb-1">Pago Incompleto</h3>
                 <p className="text-orange-800 text-sm">Parece que hubo una interrupción al momento de pagar con tu tarjeta. Completa el pago para asegurar tu pedido.</p>
               </div>
               <a 
                 href={`/pago/${order.id}`}
-                className="shrink-0 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition"
+                className="shrink-0 text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-sm transition"
               >
                 Intentar pagar de nuevo
               </a>
@@ -93,12 +93,12 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
 
           {/* DATOS DE ENVÍO */}
           {order.shippingAddress && (
-            <div className="mb-8 p-4 bg-slate-50 rounded-2xl flex items-start gap-3">
+            <div className="mb-6 md:mb-8 p-4 bg-slate-50 rounded-2xl flex items-start gap-3">
               <Truck className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-bold text-slate-900 mb-1">Dirección de Envío</p>
                 <p className="text-sm text-slate-600">{order.shippingAddress}</p>
-                <div className="flex gap-4 mt-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {order.billingDocument && <span className="text-xs font-medium text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded">DNI/RUC: {order.billingDocument}</span>}
                   {order.shippingOption && <span className="text-xs font-medium text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded uppercase">Envío: {order.shippingOption}</span>}
                 </div>
@@ -108,26 +108,26 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
 
           {/* ESTADO DEL PEDIDO */}
           {order.status === "CANCELLED" ? (
-            <div className="py-8">
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6">
+            <div className="py-4 md:py-8">
+              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-5 md:p-8 flex flex-col md:flex-row items-center gap-6">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center shrink-0">
                   <XCircle className="w-8 h-8 text-red-600" />
                 </div>
                 <div className="text-center md:text-left">
-                  <h3 className="text-2xl font-black text-red-600 mb-2">Pedido Cancelado</h3>
+                  <h3 className="text-xl md:text-2xl font-black text-red-600 mb-2">Pedido Cancelado</h3>
                   <p className="text-red-800 font-medium">Este pedido ha sido cancelado y ya no será procesado. Si tienes alguna duda o crees que es un error, por favor comunícate con soporte.</p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="py-8 relative">
+            <div className="py-4 md:py-8 relative">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 hidden md:block"></div>
               <div 
                 className="absolute top-1/2 left-0 h-1 bg-blue-600 -translate-y-1/2 hidden md:block transition-all duration-1000"
                 style={{ width: `${(currentLevel / (steps.length - 1)) * 100}%` }}
               ></div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 relative z-10">
                 {steps.map((step, idx) => {
                   const isActive = idx <= currentLevel;
                   const isCurrent = idx === currentLevel;
@@ -135,7 +135,7 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
                   
                   return (
                     <div key={step.id} className="flex md:flex-col items-center gap-4 md:gap-3 md:text-center">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-colors duration-500 ${isActive ? 'bg-blue-600 border-blue-100 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-300'}`}>
+                      <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center border-4 transition-colors duration-500 ${isActive ? 'bg-blue-600 border-blue-100 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-300'}`}>
                         <Icon className="w-5 h-5" />
                       </div>
                       <div>
@@ -151,16 +151,16 @@ export default async function PedidoPage(props: { params: Promise<{ id: string }
         </div>
 
         {/* DETALLE DE PRODUCTOS */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+        <div className="bg-white rounded-3xl p-4 sm:p-8 shadow-sm border border-slate-100">
           <h3 className="font-black text-slate-900 text-lg mb-6">Detalle de Artículos</h3>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 md:gap-6">
             {order.items.map((item) => (
-              <div key={item.id} className="flex items-center gap-4 border-b border-slate-50 pb-6 last:border-0 last:pb-0">
-                <div className="w-20 h-20 bg-slate-50 rounded-xl relative overflow-hidden shrink-0 border border-slate-100">
+              <div key={item.id} className="flex items-center gap-3 md:gap-4 border-b border-slate-50 pb-4 md:pb-6 last:border-0 last:pb-0">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 rounded-xl relative overflow-hidden shrink-0 border border-slate-100">
                   <Image src={item.productImage || '/placeholder.webp'} alt={item.productName} fill className="object-contain p-2" />
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-slate-900 line-clamp-2">{item.productName}</h4>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-bold text-sm md:text-base text-slate-900 line-clamp-2">{item.productName}</h4>
                   <p className="text-sm text-slate-500 mt-1">Cant: {item.quantity}</p>
                 </div>
                 <div className="text-right">
