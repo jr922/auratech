@@ -1,4 +1,18 @@
 import type { NextConfig } from "next";
+import os from "os";
+
+function getLocalDevOrigins(): string[] {
+  const origins = new Set<string>(["10.219.6.251", "localhost", "127.0.0.1"]);
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const net of interfaces[name] ?? []) {
+      if (net.family === "IPv4" && !net.internal) {
+        origins.add(net.address);
+      }
+    }
+  }
+  return Array.from(origins);
+}
 
 const cspHeader = `
   default-src 'self' * data: blob: 'unsafe-inline' 'unsafe-eval' ws: wss:;
@@ -16,6 +30,10 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.ts',
+    imageSizes: [400],
+    deviceSizes: [800, 1200],
     remotePatterns: [
       {
         protocol: 'https',
@@ -35,7 +53,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['www.sneakers-shops.com', 'sneakers-shops.com', 'https://www.sneakers-shops.com'],
+  allowedDevOrigins: [
+    ...getLocalDevOrigins(),
+    'www.sneakers-shops.com',
+    'sneakers-shops.com',
+  ],
   poweredByHeader: false,
   async headers() {
     return [
